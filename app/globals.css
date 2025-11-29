@@ -143,3 +143,41 @@ html {
     transition-duration: 0ms !important;
   }
 }
+
+/* Custom cursor styles */
+/* Hide native cursor on desktop devices */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  /* Ensure interactive elements also hide the cursor */
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  [data-cursor-target] {
+    cursor: none;
+  }
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  [data-testid="custom-cursor"] {
+    display: none !important;
+  }
+  
+  /* Restore native cursor on touch devices */
+  body,
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  [data-cursor-target] {
+    cursor: auto;
+  }
+}
