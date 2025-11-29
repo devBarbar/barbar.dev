@@ -2,6 +2,15 @@
 
 import { HeroCanvas } from "./hero-canvas";
 import { cn } from "@/lib/utils";
+import { motion, Variants, Easing } from "framer-motion";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { ANIMATION_DURATION } from "@/components/animated-section";
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const EASE_OUT: Easing = "easeOut";
 
 // ============================================================================
 // TYPES
@@ -42,6 +51,34 @@ export function HeroSection({
   ctaHref = "#projects",
   className,
 }: HeroSectionProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const effectiveDuration = prefersReducedMotion ? 0 : ANIMATION_DURATION;
+
+  // Animation variants for hero content fade-in on page load
+  const containerVariants: Variants = {
+    initial: { opacity: 0 },
+    animate: {
+      opacity: 1,
+      transition: {
+        duration: effectiveDuration,
+        ease: EASE_OUT,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const childVariants: Variants = {
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: effectiveDuration,
+        ease: EASE_OUT,
+      },
+    },
+  };
+
   return (
     <section
       className={cn(
@@ -53,32 +90,39 @@ export function HeroSection({
       {/* 3D Canvas Background (z-0) */}
       <HeroCanvas />
 
-      {/* Content Overlay (z-10) */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4">
+      {/* Content Overlay (z-10) - Animated on mount */}
+      <motion.div
+        className="relative z-10 flex flex-col items-center text-center px-4"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
         {/* Name */}
-        <h1
+        <motion.h1
           className={cn(
             "text-5xl md:text-7xl lg:text-8xl font-bold",
             "text-foreground",
             "mb-4 theme-transition"
           )}
+          variants={childVariants}
         >
           {name}
-        </h1>
+        </motion.h1>
 
         {/* Title */}
-        <p
+        <motion.p
           className={cn(
             "text-xl md:text-2xl lg:text-3xl",
             "text-muted-foreground",
             "mb-8 theme-transition"
           )}
+          variants={childVariants}
         >
           {title}
-        </p>
+        </motion.p>
 
         {/* CTA Button */}
-        <a
+        <motion.a
           href={ctaHref}
           className={cn(
             "inline-flex items-center justify-center",
@@ -93,10 +137,11 @@ export function HeroSection({
             "transition-all duration-300 ease-out",
             "theme-transition"
           )}
+          variants={childVariants}
         >
           {ctaText}
-        </a>
-      </div>
+        </motion.a>
+      </motion.div>
     </section>
   );
 }

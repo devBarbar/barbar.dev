@@ -1,5 +1,4 @@
-﻿---
-**Status:** DRAFT
+﻿**Status:** DRAFT
 **Date:** 2025-11-29
 
 ## Prerequisites

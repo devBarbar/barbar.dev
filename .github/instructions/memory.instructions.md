@@ -5,7 +5,7 @@ applyTo: '**'
 # 🧠 Project Memory & AI Instructions
 > **System Context for AI Agents**  
 > *File:* `.github/instructions/memory.instructions.md`  
-> *Last Updated:* 2025-11-29
+> *Last Updated:* 2025-11-30
 
 ---
 
@@ -38,6 +38,17 @@ applyTo: '**'
 | **Fallback Button** | `mailto:contact@barbar.dev` button shown when Formspree fails |
 | **RSC** | React Server Components – default component type (no directive needed) |
 | **Client Component** | Requires `"use client"` directive for hooks/browser APIs |
+| **Lenis** | Smooth scroll library wrapping the app for buttery scroll experience |
+| **AnimatedSection** | Reusable scroll-triggered animation wrapper component |
+| **Stagger Animation** | Child elements animate sequentially with 100ms delay between each |
+| **Viewport Trigger** | Animation triggers when 15% of element is visible (amount: 0.15) |
+| **Reduced Motion** | OS preference (`prefers-reduced-motion`) – disables all animations |
+| **NavItem** | Navigation configuration object with `label`, `href`, and `type` properties |
+| **Route Link** | Navigation to a full page (e.g., `/blog`) – type: `"route"` |
+| **Anchor Link** | Navigation to a section on homepage (e.g., `/#contact`) – type: `"anchor"` |
+| **Skip Link** | Accessibility link to bypass navigation and jump to main content |
+| **Mobile Menu** | Full-screen overlay navigation for mobile devices with staggered reveal |
+| **Focus Trap** | Keeps keyboard focus within the mobile menu when open |
 
 ---
 
@@ -51,6 +62,7 @@ applyTo: '**'
 | Components | shadcn/ui (new-york style) | Add via `npx shadcn@latest add <component>` |
 | 3D/WebGL | React Three Fiber + drei | Lazy loaded, graceful WebGL fallback |
 | Animations | Framer Motion | Scroll-triggered, page transitions |
+| Smooth Scroll | Lenis | Wraps app, respects reduced motion, anchor navigation |
 | Blog | MDX via `@next/mdx` | Content in `/content/blog/`, frontmatter required |
 | Forms | Zod validation + Formspree | Toast feedback via `sonner` |
 | Theme | next-themes | `class` attribute, localStorage persistence |
@@ -106,12 +118,12 @@ applyTo: '**'
 
 | ID | Feature | Status | Summary |
 |:---|:--------|:-------|:--------|
-| 001 | Project Foundation & Dependencies | ✅ Done | Next.js, Tailwind v4, shadcn/ui, MDX setup |
+| 001 | Project Foundation & Dependencies | 🧪 QA | Next.js, Tailwind v4, shadcn/ui, MDX setup |
 | 002 | Theme System (Dark/Light Mode) | ✅ Done | next-themes, 1s transitions, FOUC prevention |
-| 003 | Custom Cursor Component | 📋 Draft | Desktop only, hidden on touch devices |
-| 004 | 3D Hero Section | 📋 Draft | R3F particles, adaptive performance, theme colors |
-| 005 | Smooth Scroll & Animations | 📋 Draft | Framer Motion scroll-triggered |
-| 006 | Navigation & Layout Shell | 📋 Draft | Header, nav links, mobile hamburger |
+| 003 | Custom Cursor Component | ✅ Done | Desktop only, hidden on touch devices, spring animation |
+| 004 | 3D Hero Section | ✅ Done | R3F particles, adaptive performance, theme colors |
+| 005 | Smooth Scroll & Animations | 🧪 QA | Lenis smooth scroll, Framer Motion scroll-triggered |
+| 006 | Navigation & Layout Shell | ✅ Done | Header, nav links, mobile hamburger, skip link, focus trap |
 | 007 | Hero Content & Typography | 📋 Draft | Name, title, CTA button |
 | 008 | Projects Section (Homepage) | 📋 Draft | 3 project cards with hover effects |
 | 009 | Project Case Study Pages | 📋 Draft | `/projects/[slug]` detail pages |

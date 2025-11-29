@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { CursorProvider } from "@/hooks/use-cursor";
 import { CustomCursor } from "@/components/custom-cursor";
+import { LenisProvider } from "@/components/lenis-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +38,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <CursorProvider>
-            <CustomCursor />
-            <Header />
-            {children}
-          </CursorProvider>
+          <LenisProvider>
+            <CursorProvider>
+              <CustomCursor />
+              <Header />
+              {children}
+            </CursorProvider>
+          </LenisProvider>
         </ThemeProvider>
       </body>
     </html>
