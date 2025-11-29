@@ -47,6 +47,10 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  /* Particle colors for 3D hero (hex format for THREE.js compatibility) */
+  --particle-primary: #4f7cf7;
+  --particle-secondary: #22d3bb;
+  --particle-glow: #f5a623;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -81,6 +85,10 @@
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+  /* Particle colors for 3D hero (dark mode, hex format for THREE.js compatibility) */
+  --particle-primary: #a855f7;
+  --particle-secondary: #22d3ee;
+  --particle-glow: #fbbf24;
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -179,5 +187,31 @@ html {
   select,
   [data-cursor-target] {
     cursor: auto;
+  }
+}
+
+/* Hero loading shimmer animation */
+.hero-loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--particle-primary) 0%,
+    var(--particle-secondary) 25%,
+    var(--particle-glow) 50%,
+    var(--particle-secondary) 75%,
+    var(--particle-primary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Reduced motion: disable shimmer animation */
+@media (prefers-reduced-motion: reduce) {
+  .hero-loading-shimmer {
+    animation: none;
   }
 }
