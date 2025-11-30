@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/hero";
 import { ProjectsSection } from "@/components/projects-section";
+import { AboutSection } from "@/components/about-section";
 
 export default function Home() {
   return (
@@ -16,6 +17,9 @@ export default function Home() {
       <div id="projects">
         <ProjectsSection />
       </div>
+
+      {/* About/CV Section */}
+      <AboutSection />
     </div>
   );
 }

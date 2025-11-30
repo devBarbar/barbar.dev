@@ -242,3 +242,43 @@ html {
     }
   }
 }
+
+/* Timeline gradient line */
+.timeline-line {
+  background: linear-gradient(
+    to bottom,
+    var(--particle-primary),
+    var(--particle-secondary)
+  );
+}
+
+/* Timeline dot pulse animation */
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.timeline-dot-pulse {
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
+
+/* Achievement card glow on hover */
+.achievement-glow:hover {
+  box-shadow: 0 0 20px var(--particle-glow);
+}
+
+/* Skill badge lift effect */
+.skill-badge-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Reduced motion: disable About section animations */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-dot-pulse,
+  .achievement-glow:hover,
+  .skill-badge-hover:hover {
+    animation: none;
+    transform: none;
+  }
+}

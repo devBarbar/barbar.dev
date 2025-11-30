@@ -21,6 +21,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/", type: "route" },
   { label: "Projects", href: "/#projects", type: "anchor" },
+  { label: "About", href: "/#about", type: "anchor" },
   { label: "Blog", href: "/blog", type: "route" },
   { label: "Contact", href: "/#contact", type: "anchor" },
 ];

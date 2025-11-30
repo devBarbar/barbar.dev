@@ -286,11 +286,12 @@ describe("Navigation & Layout Shell", () => {
 
   describe("Navigation Config", () => {
     it("NAV_ITEMS should contain all required navigation items", () => {
-      expect(NAV_ITEMS).toHaveLength(4);
+      expect(NAV_ITEMS).toHaveLength(5);
 
       const labels = NAV_ITEMS.map((item) => item.label);
       expect(labels).toContain("Home");
       expect(labels).toContain("Projects");
+      expect(labels).toContain("About");
       expect(labels).toContain("Blog");
       expect(labels).toContain("Contact");
     });
@@ -299,11 +300,13 @@ describe("Navigation & Layout Shell", () => {
       const home = NAV_ITEMS.find((item) => item.label === "Home");
       const blog = NAV_ITEMS.find((item) => item.label === "Blog");
       const projects = NAV_ITEMS.find((item) => item.label === "Projects");
+      const about = NAV_ITEMS.find((item) => item.label === "About");
       const contact = NAV_ITEMS.find((item) => item.label === "Contact");
 
       expect(home?.type).toBe("route");
       expect(blog?.type).toBe("route");
       expect(projects?.type).toBe("anchor");
+      expect(about?.type).toBe("anchor");
       expect(contact?.type).toBe("anchor");
     });
 

@@ -11,6 +11,7 @@ Active testing of a User Story. You must verify **Functionality**, **Visual Inte
 I will provide you with:
 1.  **The File Path:** (e.g., `.specs/my-feature/001-story.md`)
 2.  **The Target URL:** (e.g., `http://localhost:3000`)
+3. **Regression File:** `.specs/regression-checklist.md`
 
 **Your Operational Protocol:**
 
@@ -18,7 +19,7 @@ I will provide you with:
 * Read the User Story file using the **FileSystem Tool**.
 * Parse the `## 🧪 QA Testing Strategy` checklist.
 * **Identify ONLY unchecked tests:** Filter for lines matching `- [ ]` (open tasks). **SKIP any lines with `- [x]`** (already completed).
-
+* **CRITICAL:** Identify which 1 or 2 scenarios are **Core Functionality** that must work forever (e.g., "User can Log In", "User can Submit Payment"). These belong in the Regression Checklist.
 **Step 2: Test Loop (ONE TEST AT A TIME)**
 
 ⚠️ **CRITICAL: You MUST complete ALL substeps (a-e) for ONE test before starting the next test. NEVER run multiple tests before updating the file.**
@@ -101,9 +102,64 @@ If NO → Go back and update/save NOW.
 
 ---
 
-**Step 3: Final Summary**
-* Report back: "Testing Complete. Updated `[filename]`. A11y checks performed. Lighthouse scores: [P: XX, A: XX, BP: XX, SEO: XX]."
+**Step 3: Final Summary & Archival**
 
-IF Everything is done and all tests passed then update the status to DONE with a green checkmark
+When ALL tests have passed (no remaining `- [ ]` items):
+
+1. **Update Status:** Change the story status to `✅ Done` (green checkmark)
+2. **Archive the Story:** Move the story file to a `done/` subfolder within the same directory
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  ARCHIVAL PROCESS                                       │
+├─────────────────────────────────────────────────────────┤
+│  a) VERIFY: Confirm ALL tests show `- [x]` (passed)     │
+│  b) UPDATE STATUS: Mark story as ✅ Done                │
+│  c) CREATE FOLDER: If `done/` doesn't exist, create it  │
+│     • Example: `.specs/my-feature/done/`                │
+│  d) MOVE FILE: Move story from current location to      │
+│     the `done/` subfolder                               │
+│     • FROM: `.specs/my-feature/001-story.md`            │
+│     • TO:   `.specs/my-feature/done/001-story.md`       │
+│  e) CONFIRM: Verify file was moved successfully         │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Terminal Command for Moving:**
+```powershell
+# Create done folder if it doesn't exist
+New-Item -ItemType Directory -Force -Path "[parent-folder]/done"
+# Move the story file
+Move-Item -Path "[story-file-path]" -Destination "[parent-folder]/done/"
+```
+
+* Report back: "✅ Testing Complete. All tests passed. Story archived to `[done-folder-path]`. Lighthouse scores: [P: XX, A: XX, BP: XX, SEO: XX]."
+
+**If ANY tests failed:**
+* Do NOT move the file
+* Report: "❌ Testing Incomplete. [X] tests failed. Story remains at `[filepath]`. See failure details in file."
+
+
+This is the regression checklist template if the file is empty:
+mkdir -p .specs && cat <<EOF > .specs/regression-checklist.md
+# 🛡️ Master Regression Checklist
+> **Status:** Active
+> **Last Full Run:** Never
+
+## ℹ️ Legend
+* \`[ ]\` = Pending
+* \`[x]\` = Passed
+
+## 🛑 Critical Smoke Tests
+- [ ] **REG-001 (Auth):** User can Login -> Redirects to Dashboard.
+- [ ] **REG-002 (Core):** Main Dashboard loads without errors.
+
+## 👤 Core Features
+- [ ] **REG-010:** User can create a new item.
+- [ ] **REG-011:** User can delete an item.
+
+## 📱 Responsive
+- [ ] **REG-030:** Mobile menu works on small screens.
+EOF
 
 **Are you ready? Please provide the File Path and the Target URL.**
