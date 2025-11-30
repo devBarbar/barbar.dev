@@ -1,6 +1,15 @@
 ---
 description: Acts as a Senior Architect to validate User Stories against your actual code. It analyzes data models, business logic, and edge cases to identify gaps and generate technical questions before development begins.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'todo']
+handoffs:
+  - label: Create Testing Plan
+    agent: 7-manual-testing
+    prompt: .
+    send: false
+  - label: UI Spec
+    agent: 5-ui-ux-designer
+    prompt: .
+    send: false
 ---
 
 **Role:**

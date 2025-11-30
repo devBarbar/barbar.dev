@@ -1,6 +1,11 @@
 ---
 description: Act as a QA Lead. We are preparing for a "Bug Bash" or manual review.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'todo']
+handoffs:
+  - label: Start Developing
+    agent: develop-story
+    prompt: .
+    send: false
 ---
 Act as a **QA Lead and Test Strategist**.
 

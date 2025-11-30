@@ -5,7 +5,7 @@ applyTo: '**'
 # 🧠 Project Memory & AI Instructions
 > **System Context for AI Agents**  
 > *File:* `.github/instructions/memory.instructions.md`  
-> *Last Updated:* 2025-11-30
+> *Last Updated:* 2025-11-30 (Story 009 Complete)
 
 ---
 
@@ -50,6 +50,11 @@ applyTo: '**'
 | **Mobile Menu** | Full-screen overlay navigation for mobile devices with staggered reveal |
 | **Focus Trap** | Keeps keyboard focus within the mobile menu when open |
 | **Project** | Data model with `slug`, `name`, `type`, `description`, `techStack`, and `thumbnail` fields |
+| **ProjectDetail** | Extended Project with `fullDescription`, detailed `techStack`, `features`, `challenges`, and `screenshots` |
+| **TechStackItem** | Object with `name` and `explanation` for tech badges with tooltips |
+| **Feature** | Object with `title` and `description` for project feature cards |
+| **Challenge** | Object with `problem` and `solution` for problem/solution cards |
+| **Case Study Page** | Dynamic route at `/projects/[slug]` displaying full project details |
 | **ProjectCard** | Reusable component displaying project thumbnail, type, name, description, and tech stack badges |
 | **ProjectsSection** | Homepage section containing 3 featured project cards with stagger animation |
 | **Ripple Effect** | CSS animation emanating from click point on project cards |
@@ -106,16 +111,17 @@ applyTo: '**'
 
 ### Directory Structure
 ```
-/app              → Next.js App Router pages & layouts
-/components       → React components (client/server)
-/components/ui    → shadcn/ui primitives (Button, Badge, Skeleton, etc.)
-/components/hero  → Hero section components (canvas, particles, scene)
-/lib              → Utilities + data (cn(), projects, navigation)
-/hooks            → Custom React hooks
-/content/blog     → MDX blog posts with frontmatter
-/__tests__        → Vitest test files
-/.specs           → Feature specs & acceptance criteria (reference only)
-/public/images    → Static assets (project thumbnails, etc.)
+/app                       → Next.js App Router pages & layouts
+/app/projects/[slug]       → Dynamic project case study pages
+/components                → React components (client/server)
+/components/ui             → shadcn/ui primitives (Button, Badge, Skeleton, Tooltip, etc.)
+/components/hero           → Hero section components (canvas, particles, scene)
+/lib                       → Utilities + data (cn(), projects, navigation)
+/hooks                     → Custom React hooks
+/content/blog              → MDX blog posts with frontmatter
+/__tests__                 → Vitest test files
+/.specs                    → Feature specs & acceptance criteria (reference only)
+/public/images/projects    → Project thumbnails and screenshots (SVG placeholders)
 ```
 
 ---
@@ -132,7 +138,7 @@ applyTo: '**'
 | 006 | Navigation & Layout Shell | ✅ Done | Header, nav links, mobile hamburger, skip link, focus trap |
 | 007 | Hero Content & Typography | 📋 Draft | Name, title, CTA button |
 | 008 | Projects Section (Homepage) | 🧪 QA | 3 project cards with hover effects, stagger animation, ripple click |
-| 009 | Project Case Study Pages | 📋 Draft | `/projects/[slug]` detail pages |
+| 009 | Project Case Study Pages | 🧪 QA | `/projects/[slug]` detail pages with hero, tech stack, features, challenges, screenshots |
 | 010 | About/CV Section | 📋 Draft | Bio, achievements, experience timeline |
 | 011 | MDX Blog Infrastructure | 📋 Draft | Frontmatter schema, utility functions |
 | 012 | Blog Listing Page | 📋 Draft | `/blog` with sorted posts |
@@ -252,6 +258,33 @@ const [imageLoaded, setImageLoaded] = useState(false);
 <Image onLoad={() => setImageLoaded(true)} className={cn(imageLoaded ? "opacity-100" : "opacity-0")} />
 ```
 
+### Case Study Page Pattern (Story 009)
+- **BackButton:** Client component with `history.back()`, 44×44px touch target
+- **TechStackItem:** Badge wrapped in Tooltip for explanation on hover
+- **ProjectHero:** 16:9 aspect ratio hero image with Skeleton loading state
+- **FeatureCard:** Simple title + description card with subtle border
+- **ChallengeCard:** Two-section card: problem (red accent) / solution (green accent)
+- **ScreenshotGallery:** Responsive grid (1/2/3 columns) with staggered child animation
+- **ProjectPageContent:** Full page layout composing all above components
+
+### Dynamic Route Generation Pattern
+```tsx
+// Static params for all project slugs
+export function generateStaticParams() {
+  return projectDetails.map((project) => ({ slug: project.slug }));
+}
+
+// SEO metadata with OG image
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const project = getProjectDetail(params.slug);
+  return {
+    title: project?.name,
+    description: project?.description,
+    openGraph: { images: [project?.thumbnail] },
+  };
+}
+```
+
 ---
 
 ## 11. Commands Reference
@@ -276,3 +309,66 @@ pnpm lint         # ESLint
 | `/components/ui/badge.tsx` | shadcn/ui Badge component for tech stack tags |
 | `/components/ui/skeleton.tsx` | shadcn/ui Skeleton component for loading states |
 | `/__tests__/projects-section.test.tsx` | 19 tests covering data model, rendering, a11y, responsiveness |
+
+---
+
+## 13. New Files Added (Feature 009)
+
+| File | Purpose |
+|:-----|:--------|
+| `/app/projects/[slug]/page.tsx` | Dynamic case study page with `generateStaticParams`, `generateMetadata`, `notFound()` |
+| `/components/back-button.tsx` | ArrowLeft button triggering `history.back()`, 44×44px touch target |
+| `/components/tech-stack-item.tsx` | Badge + Tooltip wrapper for tech explanations |
+| `/components/project-hero.tsx` | Full-width 16:9 hero image with Skeleton loading |
+| `/components/feature-card.tsx` | Card displaying feature title + description |
+| `/components/challenge-card.tsx` | Card with problem (red) / solution (green) sections |
+| `/components/screenshot-gallery.tsx` | Responsive 1/2/3 column grid with stagger animation |
+| `/components/project-page-content.tsx` | Full case study layout composing all sections |
+| `/components/ui/tooltip.tsx` | shadcn/ui Tooltip component for tech stack explanations |
+| `/__tests__/project-case-study.test.tsx` | 18 tests covering routing, SEO, components, a11y |
+| `/public/images/projects/*.svg` | Placeholder thumbnails and screenshots for all 3 projects |
+
+---
+
+## 14. Data Model Extensions (Feature 009)
+
+### TechStackItem Interface
+```typescript
+interface TechStackItem {
+  name: string;        // Display name on badge
+  explanation: string; // Tooltip content
+}
+```
+
+### Feature Interface
+```typescript
+interface Feature {
+  title: string;       // Feature name
+  description: string; // What it does
+}
+```
+
+### Challenge Interface
+```typescript
+interface Challenge {
+  problem: string;     // The difficulty faced
+  solution: string;    // How it was solved
+}
+```
+
+### ProjectDetail Interface
+```typescript
+interface ProjectDetail extends Project {
+  fullDescription: string;      // Extended description for case study
+  techStack: TechStackItem[];   // Detailed tech with explanations
+  features: Feature[];          // List of key features
+  challenges: Challenge[];      // Problem/solution pairs
+  screenshots: string[];        // Array of screenshot paths
+}
+```
+
+### API Functions
+```typescript
+getProjectDetail(slug: string): ProjectDetail | undefined
+projectDetails: ProjectDetail[]  // All detailed project data
+```
