@@ -215,3 +215,30 @@ html {
     animation: none;
   }
 }
+
+/* Ripple animation for project cards */
+@keyframes ripple-animation {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4);
+  }
+}
+
+/* Reduced motion: disable ripple animation */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes ripple-animation {
+    0%,
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+  }
+}

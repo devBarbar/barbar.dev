@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/hero";
+import { ProjectsSection } from "@/components/projects-section";
 
 export default function Home() {
   return (
@@ -11,15 +12,10 @@ export default function Home() {
         ctaHref="#projects"
       />
 
-      {/* Projects Section placeholder */}
-      <section id="projects" className="min-h-screen bg-background px-4 py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold text-foreground">Projects</h2>
-          <p className="mt-4 text-muted-foreground">
-            Coming soon...
-          </p>
-        </div>
-      </section>
+      {/* Projects Section with featured projects */}
+      <div id="projects">
+        <ProjectsSection />
+      </div>
     </div>
   );
 }

@@ -49,6 +49,10 @@ applyTo: '**'
 | **Skip Link** | Accessibility link to bypass navigation and jump to main content |
 | **Mobile Menu** | Full-screen overlay navigation for mobile devices with staggered reveal |
 | **Focus Trap** | Keeps keyboard focus within the mobile menu when open |
+| **Project** | Data model with `slug`, `name`, `type`, `description`, `techStack`, and `thumbnail` fields |
+| **ProjectCard** | Reusable component displaying project thumbnail, type, name, description, and tech stack badges |
+| **ProjectsSection** | Homepage section containing 3 featured project cards with stagger animation |
+| **Ripple Effect** | CSS animation emanating from click point on project cards |
 
 ---
 
@@ -104,12 +108,14 @@ applyTo: '**'
 ```
 /app              → Next.js App Router pages & layouts
 /components       → React components (client/server)
-/components/ui    → shadcn/ui primitives (Button, etc.)
-/lib              → Utilities (cn() for Tailwind class merging)
+/components/ui    → shadcn/ui primitives (Button, Badge, Skeleton, etc.)
+/components/hero  → Hero section components (canvas, particles, scene)
+/lib              → Utilities + data (cn(), projects, navigation)
 /hooks            → Custom React hooks
 /content/blog     → MDX blog posts with frontmatter
 /__tests__        → Vitest test files
 /.specs           → Feature specs & acceptance criteria (reference only)
+/public/images    → Static assets (project thumbnails, etc.)
 ```
 
 ---
@@ -125,7 +131,7 @@ applyTo: '**'
 | 005 | Smooth Scroll & Animations | 🧪 QA | Lenis smooth scroll, Framer Motion scroll-triggered |
 | 006 | Navigation & Layout Shell | ✅ Done | Header, nav links, mobile hamburger, skip link, focus trap |
 | 007 | Hero Content & Typography | 📋 Draft | Name, title, CTA button |
-| 008 | Projects Section (Homepage) | 📋 Draft | 3 project cards with hover effects |
+| 008 | Projects Section (Homepage) | 🧪 QA | 3 project cards with hover effects, stagger animation, ripple click |
 | 009 | Project Case Study Pages | 📋 Draft | `/projects/[slug]` detail pages |
 | 010 | About/CV Section | 📋 Draft | Bio, achievements, experience timeline |
 | 011 | MDX Blog Infrastructure | 📋 Draft | Frontmatter schema, utility functions |
@@ -213,7 +219,42 @@ tags: string[]      # Optional, defaults to []
 
 ---
 
-## 10. Commands Reference
+## 10. Component Patterns
+
+### ProjectCard Pattern
+- Wraps entire card in `<Link>` for full clickable area
+- Integrates `<CursorTarget>` for custom cursor hover state
+- Uses `<Skeleton>` for image loading state with fade-in transition
+- Displays tech stack with `<Badge>` components (flex-wrap)
+- Supports ripple effect on click via CSS animation
+- Focus ring via `focus-visible:ring-2 focus-visible:ring-primary`
+
+### Stagger Animation Pattern (Framer Motion)
+```tsx
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+```
+
+### Image Loading State Pattern
+```tsx
+const [imageLoaded, setImageLoaded] = useState(false);
+{!imageLoaded && <Skeleton className="absolute inset-0" />}
+<Image onLoad={() => setImageLoaded(true)} className={cn(imageLoaded ? "opacity-100" : "opacity-0")} />
+```
+
+---
+
+## 11. Commands Reference
 
 ```bash
 pnpm dev          # Start dev server (localhost:3000)
@@ -222,3 +263,16 @@ pnpm test         # Run Vitest tests
 pnpm test:watch   # Vitest in watch mode
 pnpm lint         # ESLint
 ```
+
+---
+
+## 12. New Files Added (Feature 008)
+
+| File | Purpose |
+|:-----|:--------|
+| `/lib/projects.ts` | Project data model interface and featured projects array |
+| `/components/project-card.tsx` | Individual project card with CursorTarget, Skeleton, ripple |
+| `/components/projects-section.tsx` | Section container with AnimatedSection + stagger animation |
+| `/components/ui/badge.tsx` | shadcn/ui Badge component for tech stack tags |
+| `/components/ui/skeleton.tsx` | shadcn/ui Skeleton component for loading states |
+| `/__tests__/projects-section.test.tsx` | 19 tests covering data model, rendering, a11y, responsiveness |
