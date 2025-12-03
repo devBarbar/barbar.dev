@@ -26,6 +26,8 @@ applyTo: '**'
 | **Touch Device** | `pointer: coarse` – custom cursor hidden |
 | **Stagger Animation** | Children animate sequentially (100ms delay, 15% viewport trigger) |
 | **Frontmatter** | MDX metadata: `title`, `publishedAt`, `summary`, `tags[]` |
+| **Demand Rendering** | R3F `frameloop="demand"` – only re-renders on `invalidate()` call |
+| **Ref-based Updates** | Use refs (not state) for high-frequency data (mouse, FPS) to avoid reconciliation |
 
 ---
 
@@ -36,7 +38,7 @@ applyTo: '**'
 | **Framework** | Next.js 16 (App Router) | RSC-first, pages in `/app` |
 | **Styling** | Tailwind v4 + CSS vars | `oklch()` colors, `cn()` for class merging |
 | **Components** | shadcn/ui (new-york) | `npx shadcn@latest add <component>` |
-| **3D** | React Three Fiber + drei | Lazy loaded, WebGL fallback, adaptive FPS |
+| **3D** | React Three Fiber + drei | Lazy loaded, WebGL fallback, demand rendering, adaptive FPS |
 | **Animations** | Framer Motion + Lenis | Scroll-triggered, smooth scroll, anchor nav |
 | **Blog** | MDX via `@next/mdx` | `/content/blog/`, frontmatter required |
 | **Forms** | Zod + Formspree | Toast via `sonner`, mailto fallback |
@@ -100,6 +102,9 @@ applyTo: '**'
 ### Performance
 * Lighthouse >80 all metrics (desktop + mobile)
 * 3D canvas: lazy load, <50ms main thread, 50% particle reduction when FPS <30
+* DPR limited to [1, 2] – prevents excessive GPU work on high-DPI displays
+* Bloom disabled on Chrome desktop – Chrome WebGL has paint perf issues
+* State update throttling (500ms) for animation loops – prevents reconciliation spam
 
 ### Accessibility
 * Touch targets: min 44×44px
@@ -140,6 +145,15 @@ applyTo: '**'
 ```tsx
 // generateStaticParams() for static paths
 // generateMetadata() for SEO + OG images
+```
+
+### R3F Performance (Critical)
+```tsx
+// Use frameloop="demand" + invalidate() for controlled rendering
+// Use refs for high-frequency data (mouse, FPS) – never setState in useFrame
+// Throttle React state updates to 500ms intervals
+// Cap animation deltaTime to prevent large jumps after frame drops
+// Browser detection for targeted optimizations (detectBrowser() in lib/utils)
 ```
 
 ---

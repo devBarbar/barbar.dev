@@ -135,3 +135,55 @@ export function HeroCanvas({ className }: HeroCanvasProps) {
 - [hero-canvas.tsx](../components/hero/hero-canvas.tsx)
 - [use-fps-monitor.ts](../hooks/use-fps-monitor.ts)
 - [particle-config.ts](../components/hero/particle-config.ts)
+
+---
+
+## 8. Fix Applied (2025-12-03)
+
+### Summary of Changes
+
+The following performance optimizations were implemented to resolve the Chrome desktop lag:
+
+#### 1. Canvas Frameloop Changed to "demand" Mode
+**File:** [particle-config.ts](../components/hero/particle-config.ts)
+- Changed from default "always" (uncapped) to "demand" frameloop
+- Canvas now only re-renders when `invalidate()` is called
+- Prevents runaway GPU usage in production builds
+
+#### 2. Device Pixel Ratio (DPR) Limited
+**File:** [particle-config.ts](../components/hero/particle-config.ts)
+- Added `dprMin: 1` and `dprMax: 2` limits
+- Prevents excessive GPU work on high-DPI displays
+
+#### 3. Bloom Disabled on Chrome Desktop
+**File:** [particle-config.ts](../components/hero/particle-config.ts)
+- Added `BLOOM_SETTINGS.chromeDesktop` with `enabled: false`
+- Chrome's WebGL has severe paint performance issues with post-processing effects
+
+#### 4. FPS Monitor State Updates Throttled
+**File:** [use-fps-monitor.ts](../hooks/use-fps-monitor.ts)
+- Added `FPS_STATE_UPDATE_INTERVAL = 500ms` throttle
+- Prevents React reconciliation spam (was updating state 60+ times/second)
+- Uses refs internally for FPS tracking, only updates state periodically
+
+#### 5. Mouse Tracking Uses Refs Instead of State
+**File:** [particles-scene.tsx](../components/hero/particles-scene.tsx)
+- Changed `MouseTracker` to update a ref instead of calling setState
+- Eliminates re-renders on every mouse move
+
+#### 6. Browser Detection for Targeted Optimizations
+**File:** [lib/utils.ts](../lib/utils.ts)
+- Added `detectBrowser()` utility function
+- Detects Chrome, Safari, Firefox, and device type
+- Used to conditionally disable bloom on Chrome desktop
+
+#### 7. Animation Delta Time Capped
+**File:** [particle-config.ts](../components/hero/particle-config.ts)
+- Added `ANIMATION_PARAMS.maxDeltaTime = 0.1` (100ms)
+- Prevents large animation jumps after frame drops
+
+### Test Coverage
+
+New test file: [hero-performance.test.tsx](../__tests__/hero-performance.test.tsx)
+- 11 new tests covering all performance optimizations
+- All 167 tests pass (including existing tests)
