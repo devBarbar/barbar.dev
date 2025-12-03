@@ -29,7 +29,8 @@ applyTo: '**'
 | **Demand Rendering** | R3F `frameloop="demand"` – only re-renders on `invalidate()` call |
 | **Ref-based Updates** | Use refs (not state) for high-frequency data (mouse, FPS) to avoid reconciliation |
 | **Reading Time** | Calculated at 200 words/minute average for blog posts |
-| **MDX Slug** | Derived from filename or explicit frontmatter `slug` field |
+| **Pagination** | State-based listing: `currentPage`, `perPage`, `total` – filtered results respected on page nav |
+| **Search/Filter Pattern** | Client-side filtering in staggered Container; search query matches title, summary, tags |
 
 ---
 
@@ -75,7 +76,7 @@ applyTo: '**'
 | **Project** | `/lib/projects.ts` | `slug`, `name`, `type`, `techStack[]`, `thumbnail` |
 | **ProjectDetail** | `/lib/projects.ts` | extends Project + `features[]`, `challenges[]`, `screenshots[]` |
 | **AboutData** | `/lib/about.ts` | `achievements[]`, `experience[]`, `education[]`, `skills[]` |
-| **BlogPost** | `/lib/blog.ts` | `slug`, `title`, `publishedAt` (Date), `summary`, `tags?`, `readingTime` |
+| **BlogPost** | `/lib/blog.ts` | `slug`, `title`, `publishedAt` (Date), `summary`, `tags?`, `readingTime` (number) |
 
 ---
 
@@ -94,7 +95,8 @@ applyTo: '**'
 | 009 | Case Study Pages | 🧪 QA |
 | 010 | About/CV Section | 🧪 QA |
 | 011 | Blog Infrastructure (MDX) | ✅ Done |
-| 012-014 | Blog (listing, detail, first post) | 📋 Draft |
+| 012 | Blog Listing Page | ✅ Done |
+| 013-014 | Blog (detail, first post) | 📋 Draft |
 | 015-016 | Contact Form (UI, submission) | 📋 Draft |
 | 017-019 | Polish (responsive, perf, deploy) | 📋 Draft |
 
@@ -157,6 +159,17 @@ applyTo: '**'
 // getAllSlugs() → string[] for generateStaticParams()
 // Frontmatter validated via Zod at parse time
 // MDX plugins: remark-gfm (tables, strikethrough), rehype-pretty-code (syntax highlight)
+```
+
+### Content Listing (Pagination + Search/Filter)
+```tsx
+// RSC layout, Client Component for interactivity
+// State: { searchQuery, currentPage, filteredPosts, totalPages }
+// Filter logic: title + summary + tags (case-insensitive substring match)
+// Pagination: perPage = 9, page reset on search change
+// Results count: Show "X posts found" during filter
+// Empty state: Dedicated component with message + call-to-action
+// Animations: Stagger children (100ms delay, 15% viewport trigger) + reduced motion support
 ```
 
 ### R3F Performance (Critical)
