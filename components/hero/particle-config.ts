@@ -64,6 +64,13 @@ export const BLOOM_SETTINGS = {
     radius: 0,
     threshold: 0,
   },
+  /** Chrome desktop has severe paint performance issues with bloom - disable */
+  chromeDesktop: {
+    enabled: false,
+    intensity: 0,
+    radius: 0,
+    threshold: 0,
+  },
 } as const;
 
 // ============================================================================
@@ -95,6 +102,9 @@ export const ANIMATION_PARAMS = {
 
   /** Maximum random delay for staggered theme transition (ms) */
   themeTransitionMaxDelay: 500,
+
+  /** Maximum delta time (seconds) to prevent large animation jumps after frame drops */
+  maxDeltaTime: 0.1,
 } as const;
 
 // ============================================================================
@@ -125,6 +135,33 @@ export const CANVAS_SETTINGS = {
 
   /** Particle spawn range (units from center) */
   spawnRange: 8,
+
+  /** 
+   * Frameloop mode: 'demand' renders only when needed (invalidate() called)
+   * This prevents the uncapped frame loop that was causing Chrome desktop lag
+   */
+  frameloop: "demand" as const,
+
+  /** Minimum device pixel ratio (prevents excessive GPU work) */
+  dprMin: 1,
+
+  /** Maximum device pixel ratio (prevents excessive GPU work on high-DPI screens) */
+  dprMax: 2,
+
+  /** WebGL power preference for optimal performance */
+  powerPreference: "high-performance" as const,
+} as const;
+
+// ============================================================================
+// PERFORMANCE SETTINGS
+// ============================================================================
+
+export const PERFORMANCE_SETTINGS = {
+  /** Use refs instead of state for mouse position tracking to avoid re-renders */
+  useMouseRef: true,
+
+  /** Throttle FPS state updates to avoid React reconciliation spam */
+  throttleStateUpdates: true,
 } as const;
 
 // ============================================================================

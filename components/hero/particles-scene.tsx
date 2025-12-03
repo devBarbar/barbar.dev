@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, invalidate } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Vector3 } from "three";
 import { useTheme } from "next-themes";
@@ -15,6 +15,7 @@ import {
 } from "./particle-config";
 import { useFpsMonitor } from "@/hooks/use-fps-monitor";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { detectBrowser } from "@/lib/utils";
 
 // ============================================================================
 // TYPES
@@ -88,34 +89,45 @@ function useParticleColors() {
 }
 
 // ============================================================================
-// MOUSE TRACKER COMPONENT
+// MOUSE TRACKER COMPONENT (Performance Optimized)
 // ============================================================================
 
 interface MouseTrackerProps {
-  onMouseMove: (position: Vector3 | null) => void;
+  /** Ref to update mouse position (avoids state updates on every frame) */
+  mousePositionRef: React.MutableRefObject<Vector3 | null>;
 }
 
-function MouseTracker({ onMouseMove }: MouseTrackerProps) {
+/**
+ * Tracks mouse position in 3D space.
+ * Uses refs instead of state callbacks to avoid triggering re-renders.
+ * Calls invalidate() to trigger re-render only when needed (demand frameloop).
+ */
+function MouseTracker({ mousePositionRef }: MouseTrackerProps) {
   const { camera, size } = useThree();
-  const mouseRef = useRef(new Vector3());
+  const localMouseRef = useRef(new Vector3());
 
   useFrame((state) => {
     // Convert pointer to world position at z=0
     const pointer = state.pointer;
-    mouseRef.current.set(
+    localMouseRef.current.set(
       (pointer.x * size.width) / 100,
       (pointer.y * size.height) / 100,
       0
     );
-    mouseRef.current.unproject(camera);
-    onMouseMove(mouseRef.current.clone());
+    localMouseRef.current.unproject(camera);
+    
+    // Update the shared ref (no state update, no re-render)
+    mousePositionRef.current = localMouseRef.current.clone();
+    
+    // Invalidate to trigger re-render (since we use frameloop="demand")
+    invalidate();
   });
 
   return null;
 }
 
 // ============================================================================
-// FPS MONITOR COMPONENT
+// FPS MONITOR COMPONENT (Performance Optimized)
 // ============================================================================
 
 interface FpsMonitorComponentProps {
@@ -123,6 +135,11 @@ interface FpsMonitorComponentProps {
   onRecover: () => void;
 }
 
+/**
+ * Monitors FPS within the R3F context.
+ * Uses throttled state updates via useFpsMonitor hook.
+ * Calls invalidate() to ensure continuous frame recording.
+ */
 function FpsMonitorComponent({
   onDegrade,
   onRecover,
@@ -131,30 +148,37 @@ function FpsMonitorComponent({
 
   useFrame(() => {
     recordFrame();
+    // Invalidate to keep the animation loop going (since we use frameloop="demand")
+    invalidate();
   });
 
   return null;
 }
 
 // ============================================================================
-// PARTICLES CONTAINER
+// PARTICLES CONTAINER (Performance Optimized)
 // ============================================================================
 
 interface ParticlesContainerProps {
   particles: ParticleData[];
   isDarkMode: boolean;
   animate: boolean;
-  mousePosition: Vector3 | null;
+  /** Ref-based mouse position (avoids re-renders on mouse move) */
+  mousePositionRef: React.MutableRefObject<Vector3 | null>;
   particleOpacity: number;
   primaryColor: string;
   secondaryColor: string;
 }
 
+/**
+ * Container for all particle meshes.
+ * Uses ref-based mouse tracking to avoid re-renders.
+ */
 function ParticlesContainer({
   particles,
   isDarkMode,
   animate,
-  mousePosition,
+  mousePositionRef,
   particleOpacity,
   primaryColor,
   secondaryColor,
@@ -167,7 +191,7 @@ function ParticlesContainer({
           data={particle}
           isDarkMode={isDarkMode}
           animate={animate}
-          mousePosition={mousePosition}
+          mousePosition={mousePositionRef.current}
           opacity={particleOpacity}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
@@ -178,7 +202,7 @@ function ParticlesContainer({
 }
 
 // ============================================================================
-// MAIN SCENE COMPONENT
+// MAIN SCENE COMPONENT (Performance Optimized)
 // ============================================================================
 
 export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
@@ -190,9 +214,14 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
 
   // State
   const [isReady, setIsReady] = useState(false);
-  const [mousePosition, setMousePosition] = useState<Vector3 | null>(null);
   const [isReduced, setIsReduced] = useState(false);
   const [particleOpacity, setParticleOpacity] = useState(0);
+  
+  // Ref-based mouse tracking (avoids state updates on every mouse move)
+  const mousePositionRef = useRef<Vector3 | null>(null);
+  
+  // Detect browser for performance optimizations
+  const browserInfo = useMemo(() => detectBrowser(), []);
 
   // Determine particle count based on device and performance state
   const baseCount = useMemo(() => {
@@ -218,14 +247,9 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
     setIsReduced(false);
   }, []);
 
-  // Handle mouse tracking
-  const handleMouseMove = useCallback((position: Vector3 | null) => {
-    setMousePosition(position);
-  }, []);
-
   // Clear mouse position when not hovering
   const handlePointerLeave = useCallback(() => {
-    setMousePosition(null);
+    mousePositionRef.current = null;
   }, []);
 
   // Fade in particles when ready
@@ -246,13 +270,18 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
     }
   }, [isReady]);
 
-  // Get bloom settings based on theme and device
+  // Get bloom settings based on theme, device, and browser
+  // Chrome desktop has severe paint performance issues with bloom - disable it
   const bloomSettings = useMemo(() => {
     if (deviceType === "mobile" || deviceType === "tablet") {
       return BLOOM_SETTINGS.mobile;
     }
+    // Disable bloom on Chrome desktop due to severe paint performance issues
+    if (browserInfo.isChrome && browserInfo.isDesktop) {
+      return BLOOM_SETTINGS.chromeDesktop;
+    }
     return isDarkMode ? BLOOM_SETTINGS.dark : BLOOM_SETTINGS.light;
-  }, [deviceType, isDarkMode]);
+  }, [deviceType, isDarkMode, browserInfo.isChrome, browserInfo.isDesktop]);
 
   // Notify when ready
   useEffect(() => {
@@ -272,9 +301,17 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
         far: CANVAS_SETTINGS.cameraFar,
         position: [0, 0, CANVAS_SETTINGS.cameraPosition],
       }}
+      // Use demand frameloop to prevent uncapped rendering
+      frameloop={CANVAS_SETTINGS.frameloop}
+      // Limit DPR to prevent excessive GPU work
+      dpr={[CANVAS_SETTINGS.dprMin, CANVAS_SETTINGS.dprMax]}
       onPointerLeave={handlePointerLeave}
       onError={(error) => onError?.(new Error(String(error)))}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ 
+        antialias: true, 
+        alpha: true,
+        powerPreference: CANVAS_SETTINGS.powerPreference,
+      }}
       style={{ background: "transparent" }}
       aria-hidden="true"
       role="img"
@@ -284,10 +321,10 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
       <pointLight position={[10, 10, 10]} intensity={1} />
       <pointLight position={[-10, -10, -10]} intensity={0.5} />
 
-      {/* Mouse tracking */}
-      <MouseTracker onMouseMove={handleMouseMove} />
+      {/* Mouse tracking (uses ref, not state) */}
+      <MouseTracker mousePositionRef={mousePositionRef} />
 
-      {/* FPS monitoring (only on desktop) */}
+      {/* FPS monitoring (only on desktop, uses throttled state updates) */}
       {deviceType === "desktop" && (
         <FpsMonitorComponent
           onDegrade={handleDegrade}
@@ -300,13 +337,13 @@ export function ParticlesScene({ onReady, onError }: ParticlesSceneProps) {
         particles={particles}
         isDarkMode={isDarkMode}
         animate={!prefersReducedMotion}
-        mousePosition={prefersReducedMotion ? null : mousePosition}
+        mousePositionRef={prefersReducedMotion ? { current: null } : mousePositionRef}
         particleOpacity={particleOpacity}
         primaryColor={colors.primary}
         secondaryColor={colors.secondary}
       />
 
-      {/* Post-processing effects (bloom) */}
+      {/* Post-processing effects (bloom) - disabled on Chrome desktop */}
       {bloomSettings.enabled && (
         <EffectComposer>
           <Bloom
