@@ -6,12 +6,11 @@ const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
-// Wrap the Next.js config with MDX support
+// Wrap the Next.js config with MDX support - keep plugins minimal for Turbopack compatibility
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
   options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
+    remarkPlugins: ["remark-gfm"],
+    rehypePlugins: ["rehype-pretty-code"],
   },
 });
 

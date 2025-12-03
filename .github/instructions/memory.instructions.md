@@ -28,6 +28,8 @@ applyTo: '**'
 | **Frontmatter** | MDX metadata: `title`, `publishedAt`, `summary`, `tags[]` |
 | **Demand Rendering** | R3F `frameloop="demand"` – only re-renders on `invalidate()` call |
 | **Ref-based Updates** | Use refs (not state) for high-frequency data (mouse, FPS) to avoid reconciliation |
+| **Reading Time** | Calculated at 200 words/minute average for blog posts |
+| **MDX Slug** | Derived from filename or explicit frontmatter `slug` field |
 
 ---
 
@@ -73,7 +75,7 @@ applyTo: '**'
 | **Project** | `/lib/projects.ts` | `slug`, `name`, `type`, `techStack[]`, `thumbnail` |
 | **ProjectDetail** | `/lib/projects.ts` | extends Project + `features[]`, `challenges[]`, `screenshots[]` |
 | **AboutData** | `/lib/about.ts` | `achievements[]`, `experience[]`, `education[]`, `skills[]` |
-| **BlogPost** | `/content/blog/*.mdx` | frontmatter: title, publishedAt, summary, tags |
+| **BlogPost** | `/lib/blog.ts` | `slug`, `title`, `publishedAt` (Date), `summary`, `tags?`, `readingTime` |
 
 ---
 
@@ -91,7 +93,8 @@ applyTo: '**'
 | 008 | Projects Section | 🧪 QA |
 | 009 | Case Study Pages | 🧪 QA |
 | 010 | About/CV Section | 🧪 QA |
-| 011-014 | Blog (MDX, listing, detail, first post) | 📋 Draft |
+| 011 | Blog Infrastructure (MDX) | ✅ Done |
+| 012-014 | Blog (listing, detail, first post) | 📋 Draft |
 | 015-016 | Contact Form (UI, submission) | 📋 Draft |
 | 017-019 | Polish (responsive, perf, deploy) | 📋 Draft |
 
@@ -145,6 +148,15 @@ applyTo: '**'
 ```tsx
 // generateStaticParams() for static paths
 // generateMetadata() for SEO + OG images
+```
+
+### Blog Infrastructure
+```tsx
+// getAllPosts() → sorted by publishedAt DESC, then title ASC
+// getPostBySlug(slug) → BlogPost | undefined
+// getAllSlugs() → string[] for generateStaticParams()
+// Frontmatter validated via Zod at parse time
+// MDX plugins: remark-gfm (tables, strikethrough), rehype-pretty-code (syntax highlight)
 ```
 
 ### R3F Performance (Critical)
