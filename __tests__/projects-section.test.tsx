@@ -104,6 +104,7 @@ vi.mock("next/link", () => ({
 vi.mock("@/hooks/use-cursor", () => ({
   useCursor: () => ({
     setIsHovering: vi.fn(),
+    setVariant: vi.fn(),
   }),
 }));
 

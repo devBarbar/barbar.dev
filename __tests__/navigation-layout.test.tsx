@@ -37,7 +37,7 @@ vi.mock("framer-motion", async () => {
 
 // Mock use-cursor hook
 vi.mock("@/hooks/use-cursor", () => ({
-  useCursor: () => ({ setIsHovering: vi.fn() }),
+  useCursor: () => ({ setIsHovering: vi.fn(), setVariant: vi.fn() }),
   CursorProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
   ),

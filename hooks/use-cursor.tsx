@@ -11,6 +11,11 @@ import {
 } from "react";
 
 /**
+ * Cursor variant types
+ */
+export type CursorVariant = "default" | "hover" | "text";
+
+/**
  * Cursor state interface
  */
 interface CursorState {
@@ -22,6 +27,8 @@ interface CursorState {
   isHovering: boolean;
   /** Whether the cursor is visible (false when mouse leaves window) */
   isVisible: boolean;
+  /** Current cursor variant */
+  variant: CursorVariant;
 }
 
 /**
@@ -32,6 +39,8 @@ interface CursorContextType {
   cursorState: CursorState;
   /** Set hover state (called by CursorTarget) */
   setIsHovering: (hovering: boolean) => void;
+  /** Set cursor variant (default, hover, text) */
+  setVariant: (variant: CursorVariant) => void;
   /** Whether reduced motion is preferred */
   prefersReducedMotion: boolean;
 }
@@ -53,6 +62,7 @@ export function CursorProvider({ children }: { children: ReactNode }) {
     y: 0,
     isHovering: false,
     isVisible: true,
+    variant: "default",
   });
 
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -110,6 +120,13 @@ export function CursorProvider({ children }: { children: ReactNode }) {
   }, []);
 
   /**
+   * Set cursor variant (default, hover, text)
+   */
+  const setVariant = useCallback((variant: CursorVariant) => {
+    setCursorState((prev) => ({ ...prev, variant }));
+  }, []);
+
+  /**
    * Set up event listeners and detect reduced motion preference
    */
   useEffect(() => {
@@ -143,7 +160,7 @@ export function CursorProvider({ children }: { children: ReactNode }) {
 
   return (
     <CursorContext.Provider
-      value={{ cursorState, setIsHovering, prefersReducedMotion }}
+      value={{ cursorState, setIsHovering, setVariant, prefersReducedMotion }}
     >
       {children}
     </CursorContext.Provider>

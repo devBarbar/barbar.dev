@@ -17,6 +17,12 @@ const CURSOR_SIZE = 24;
 const CURSOR_HOVER_SIZE = 48;
 
 /**
+ * Text cursor dimensions
+ */
+const CURSOR_TEXT_WIDTH = 2;
+const CURSOR_TEXT_HEIGHT = 24;
+
+/**
  * Spring configuration for smooth cursor movement
  */
 const SPRING_CONFIG = {
@@ -40,6 +46,7 @@ const REDUCED_MOTION_CONFIG = {
  * Features:
  * - Smooth spring-based animation using Framer Motion
  * - Grows and changes color on hover over CursorTarget elements
+ * - Shows text cursor (I-beam) variant for text inputs
  * - Hidden on touch devices via CSS (pointer: coarse)
  * - Fades out when mouse leaves the window
  * - Respects prefers-reduced-motion preference
@@ -68,20 +75,76 @@ export function CustomCursor() {
     setMounted(true);
   }, []);
 
+  // Calculate cursor offset based on variant
+  const getCursorOffset = () => {
+    if (cursorState.variant === "text") {
+      return { x: CURSOR_TEXT_WIDTH / 2, y: CURSOR_TEXT_HEIGHT / 2 };
+    }
+    if (cursorState.isHovering) {
+      return { x: CURSOR_HOVER_SIZE / 2, y: CURSOR_HOVER_SIZE / 2 };
+    }
+    return { x: CURSOR_SIZE / 2, y: CURSOR_SIZE / 2 };
+  };
+
   // Update motion values when cursor position changes
   useEffect(() => {
-    cursorX.set(cursorState.x - (cursorState.isHovering ? CURSOR_HOVER_SIZE : CURSOR_SIZE) / 2);
-    cursorY.set(cursorState.y - (cursorState.isHovering ? CURSOR_HOVER_SIZE : CURSOR_SIZE) / 2);
-  }, [cursorState.x, cursorState.y, cursorState.isHovering, cursorX, cursorY]);
+    const offset = getCursorOffset();
+    cursorX.set(cursorState.x - offset.x);
+    cursorY.set(cursorState.y - offset.y);
+  }, [cursorState.x, cursorState.y, cursorState.isHovering, cursorState.variant, cursorX, cursorY]);
 
   // Don't render during SSR
   if (!mounted) {
     return null;
   }
 
+  // Text cursor variant (I-beam shape)
+  if (cursorState.variant === "text" && cursorState.isHovering) {
+    const textCursorElement = (
+      <motion.div
+        data-testid="custom-cursor"
+        data-cursor-variant="text"
+        className={cn(
+          // Base styles
+          "pointer-events-none fixed top-0 left-0",
+          // Color - uses theme variables
+          "bg-primary",
+          // Z-index - above all content
+          "z-9999",
+          // GPU acceleration
+          "will-change-transform",
+          // Theme transition
+          "theme-transition"
+        )}
+        style={{
+          x: springX,
+          y: springY,
+          width: CURSOR_TEXT_WIDTH,
+          height: CURSOR_TEXT_HEIGHT,
+        }}
+        animate={{
+          opacity: cursorState.isVisible ? 1 : 0,
+        }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0 }
+            : {
+                type: "spring",
+                damping: 20,
+                stiffness: 300,
+              }
+        }
+      />
+    );
+
+    return createPortal(textCursorElement, document.body);
+  }
+
+  // Default/hover cursor variant (circle)
   const cursorElement = (
     <motion.div
       data-testid="custom-cursor"
+      data-cursor-variant={cursorState.variant}
       className={cn(
         // Base styles
         "pointer-events-none fixed top-0 left-0 rounded-full",

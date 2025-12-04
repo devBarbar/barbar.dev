@@ -32,6 +32,8 @@ applyTo: '**'
 | **Pagination** | State-based listing: `currentPage`, `perPage`, `total` – filtered results respected on page nav |
 | **Search/Filter Pattern** | Client-side filtering in staggered Container; search query matches title, summary, tags |
 | **Future-dated Posts** | Posts with `publishedAt` > today; hidden from listings, accessible via direct URL |
+| **Grapheme Cluster** | True "user-perceived character" via `Intl.Segmenter` – accurate emoji/Unicode counting |
+| **Cursor Variant** | `"default"` \| `"hover"` \| `"text"` – I-beam for text inputs via `CursorTarget variant="text"` |
 
 ---
 
@@ -78,6 +80,7 @@ applyTo: '**'
 | **ProjectDetail** | `/lib/projects.ts` | extends Project + `features[]`, `challenges[]`, `screenshots[]` |
 | **AboutData** | `/lib/about.ts` | `achievements[]`, `experience[]`, `education[]`, `skills[]` |
 | **BlogPost** | `/lib/blog.ts` | `slug`, `title`, `publishedAt` (Date), `summary`, `tags?`, `readingTime` (number) |
+| **ContactForm** | `/lib/contact.ts` | Zod schema: name (max 100), email, message (max 500 graphemes) |
 
 ---
 
@@ -99,7 +102,8 @@ applyTo: '**'
 | 012 | Blog Listing Page | ✅ Done |
 | 013 | Blog Post Detail Page | 🧪 QA |
 | 014 | First Blog Post | 📋 Draft |
-| 015-016 | Contact Form (UI, submission) | 📋 Draft |
+| 015 | Contact Form UI | ✅ Done |
+| 016 | Contact Form Submission | 📋 Draft |
 | 017-019 | Polish (responsive, perf, deploy) | 📋 Draft |
 
 ---
@@ -191,6 +195,16 @@ applyTo: '**'
 // Throttle React state updates to 500ms intervals
 // Cap animation deltaTime to prevent large jumps after frame drops
 // Browser detection for targeted optimizations (detectBrowser() in lib/utils)
+```
+
+### Contact Form (Validation)
+```tsx
+// Zod schema in lib/contact.ts – validates on submit only
+// Grapheme cluster counting via Intl.Segmenter (accurate emoji handling)
+// Paste rejection: entire paste blocked if exceeds limit (no truncation)
+// Char counter colors: warning (80% / 400), danger (96% / 480) via CSS classes
+// CursorTarget variant="text" for I-beam cursor on inputs
+// ContactSection renders globally in layout.tsx after {children}
 ```
 
 ---

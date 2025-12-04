@@ -351,3 +351,36 @@ html {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
 
+/* ============================================================================
+   CHARACTER COUNTER - Contact form styling
+   ============================================================================ */
+
+/* Character counter color states */
+.char-counter {
+  transition: color 200ms ease-in-out;
+}
+
+.char-counter.warning {
+  color: oklch(0.75 0.15 85); /* Yellow/amber warning */
+}
+
+.char-counter.danger {
+  color: oklch(0.65 0.2 25); /* Red danger */
+}
+
+/* Dark mode character counter colors */
+.dark .char-counter.warning {
+  color: oklch(0.8 0.15 85); /* Brighter yellow for dark mode */
+}
+
+.dark .char-counter.danger {
+  color: oklch(0.7 0.2 25); /* Brighter red for dark mode */
+}
+
+/* Reduced motion: disable counter transition */
+@media (prefers-reduced-motion: reduce) {
+  .char-counter {
+    transition: none;
+  }
+}
+

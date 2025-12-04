@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import { CursorProvider } from "@/hooks/use-cursor";
 import { CustomCursor } from "@/components/custom-cursor";
 import { LenisProvider } from "@/components/lenis-provider";
+import { ContactSection } from "@/components/contact-section";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,8 @@ export default function RootLayout({
             <CursorProvider>
               <CustomCursor />
               <Header />
-              {children}
+              <main>{children}</main>
+              <ContactSection />
             </CursorProvider>
           </LenisProvider>
         </ThemeProvider>
