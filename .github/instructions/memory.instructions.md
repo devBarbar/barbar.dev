@@ -31,6 +31,7 @@ applyTo: '**'
 | **Reading Time** | Calculated at 200 words/minute average for blog posts |
 | **Pagination** | State-based listing: `currentPage`, `perPage`, `total` – filtered results respected on page nav |
 | **Search/Filter Pattern** | Client-side filtering in staggered Container; search query matches title, summary, tags |
+| **Future-dated Posts** | Posts with `publishedAt` > today; hidden from listings, accessible via direct URL |
 
 ---
 
@@ -96,7 +97,8 @@ applyTo: '**'
 | 010 | About/CV Section | 🧪 QA |
 | 011 | Blog Infrastructure (MDX) | ✅ Done |
 | 012 | Blog Listing Page | ✅ Done |
-| 013-014 | Blog (detail, first post) | 📋 Draft |
+| 013 | Blog Post Detail Page | 🧪 QA |
+| 014 | First Blog Post | 📋 Draft |
 | 015-016 | Contact Form (UI, submission) | 📋 Draft |
 | 017-019 | Polish (responsive, perf, deploy) | 📋 Draft |
 
@@ -154,11 +156,21 @@ applyTo: '**'
 
 ### Blog Infrastructure
 ```tsx
-// getAllPosts() → sorted by publishedAt DESC, then title ASC
-// getPostBySlug(slug) → BlogPost | undefined
+// getAllPosts(includeFuture?) → sorted by publishedAt DESC, then title ASC
+// getPostBySlug(slug) → BlogPost | undefined (uses includeFuture=true internally)
 // getAllSlugs() → string[] for generateStaticParams()
 // Frontmatter validated via Zod at parse time
 // MDX plugins: remark-gfm (tables, strikethrough), rehype-pretty-code (syntax highlight)
+// Future-dated posts: hidden from listing (getAllPosts(false)), accessible via direct URL
+```
+
+### Blog Post Detail Page
+```tsx
+// Dynamic MDX loading via import() in client component (blog-post-content.tsx)
+// ReadingProgressBar: fixed top, scroll %, ARIA progressbar role
+// TableOfContents: IntersectionObserver for active heading tracking, sticky desktop, collapsible mobile
+// ShareButtons: Twitter/LinkedIn intents + native clipboard API with aria-live announcements
+// MDX components use CSS variables for theme compatibility (see mdx-components.tsx)
 ```
 
 ### Content Listing (Pagination + Search/Filter)

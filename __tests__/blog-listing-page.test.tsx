@@ -252,7 +252,8 @@ describe("Blog Listing Page (012)", () => {
     });
 
     it("Given there are many blog posts, When I use search/filter controls, Then posts are filtered/paginated accordingly, maintaining sort order", () => {
-      const posts = getAllPosts();
+      // Use includeFuture=true since test creates posts with dates Dec 1-5 (some may be future-dated)
+      const posts = getAllPosts(true);
       const pagePosts = posts.filter((p) =>
         /^page-post-/.test(p.slug)
       );

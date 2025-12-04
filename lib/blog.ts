@@ -124,16 +124,25 @@ function parseMDXFile(filename: string): BlogPost | null {
 /**
  * Get all blog posts sorted by publishedAt descending.
  * Secondary sort by title ascending if dates match.
+ * 
+ * By default, excludes future-dated posts (posts with publishedAt > now).
+ * Pass includeFuture=true to include all posts regardless of date.
+ * 
+ * @param includeFuture - If true, includes posts with future publishedAt dates
  * @returns Array of BlogPost metadata (empty array if no posts)
  */
-export function getAllPosts(): BlogPost[] {
+export function getAllPosts(includeFuture: boolean = false): BlogPost[] {
   const mdxFiles = getMDXFiles();
   const posts: BlogPost[] = [];
+  const now = new Date();
 
   for (const filename of mdxFiles) {
     const post = parseMDXFile(filename);
     if (post) {
-      posts.push(post);
+      // Filter out future-dated posts unless includeFuture is true
+      if (includeFuture || post.publishedAt.getTime() <= now.getTime()) {
+        posts.push(post);
+      }
     }
   }
 
@@ -149,19 +158,29 @@ export function getAllPosts(): BlogPost[] {
 
 /**
  * Get a single blog post by slug.
+ * 
+ * Note: This retrieves posts regardless of publishedAt date,
+ * allowing future-dated posts to be accessed via direct URL.
+ * 
  * @param slug - The post slug to find
  * @returns BlogPost or undefined if not found
  */
 export function getPostBySlug(slug: string): BlogPost | undefined {
-  const posts = getAllPosts();
+  // Include all posts (even future-dated) when searching by slug
+  const posts = getAllPosts(true);
   return posts.find((post) => post.slug === slug);
 }
 
 /**
  * Get all blog post slugs (for generateStaticParams).
+ * 
+ * Includes all posts (even future-dated) to ensure static generation
+ * covers posts that will become visible in the future.
+ * 
  * @returns Array of all post slugs
  */
 export function getAllSlugs(): string[] {
-  const posts = getAllPosts();
+  // Include all posts for static generation
+  const posts = getAllPosts(true);
   return posts.map((post) => post.slug);
 }
