@@ -27,7 +27,16 @@ I will provide you with a **User Story**. Your goal is to analyze this story aga
 **Constraints:**
 * Do not ask generic questions (e.g., "What color should the button be?").
 * **Reference specific files, classes, or variables** in your questions to prove you checked the context (e.g., *"The `User` class currently lacks a `middleName` field; should this be added as a nullable string?"*).
-* Group questions by category: **Data**, **Logic**, **UI/API**.
+
+* For each question, Write the Question and below that present four selectable answers in a Markdown table with columns `Option` and `Suggested Response`: **A**, **B**, **C** with concise suggested responses, plus **D** = "Write your own answer". 
+
+Question: <Question text>
+| Option | Description |
+|--------|-------------|
+| A | <Option A description> |
+| B | <Option B description> |
+| C | <Option C description> (add D/E as needed up to 5) |
+| Short | Provide a different short answer (<=5 words) (Include only if free-form alternative is appropriate) |
 
 Once you are done with everythign and all questions are answered and if this story required UI / UX changes then change the status of the userstory to : READY FOR UI/UX else change it to READY FOR DEVELOPMENT
 **The User Story:**
