@@ -46,9 +46,9 @@ export default function About({ locale }: { locale: Locale }) {
                                         <div className="w-3 h-3 bg-current rounded-full"></div>
                                     </div>
                                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-xl shadow-lg border-slate-800 transition-all hover:border-slate-600 hover:shadow-blue-900/10 hover:-translate-y-1">
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                                            <h4 className="font-bold text-lg text-white">{exp.role}</h4>
-                                            <time className="text-sm font-medium text-blue-400">{exp.period}</time>
+                                        <div className="mb-2 flex min-w-0 flex-col items-start gap-1">
+                                            <h4 className="break-words text-lg font-bold text-white">{exp.role}</h4>
+                                            <time className="whitespace-nowrap text-sm font-medium text-blue-400">{exp.period}</time>
                                         </div>
                                         <div className="text-slate-300 font-medium mb-3">{exp.company}</div>
                                         <p className="text-slate-400 text-sm leading-relaxed">{exp.description}</p>
