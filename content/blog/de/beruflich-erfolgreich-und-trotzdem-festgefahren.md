@@ -1,6 +1,6 @@
 ---
-title: "Beruflich erfolgreich – und trotzdem festgefahren"
-description: "Warum beruflicher Erfolg nicht automatisch bedeutet, dass sich das eigene Leben nach Fortschritt anfühlt – und weshalb ich jetzt trotzdem mit diesem Kanal anfange."
+title: "Beruflich erfolgreich und trotzdem festgefahren"
+description: "Warum beruflicher Erfolg nicht automatisch bedeutet, dass sich das eigene Leben nach Fortschritt anfühlt, und weshalb ich jetzt trotzdem mit diesem Kanal anfange."
 date: "2026-08-23"
 tags:
   - Persönliche Entwicklung
@@ -15,7 +15,7 @@ youtubeVideoId: "AcTmnFGPzwg"
 
 Von außen sieht mein Leben wahrscheinlich ziemlich ordentlich aus. Ich arbeite in der Softwareentwicklung, habe Verantwortung übernommen und beruflich vieles erreicht, worauf ich stolz sein kann. Trotzdem begleitet mich schon lange das Gefühl, an einigen wichtigen Stellen nicht wirklich voranzukommen.
 
-Seit Jahren will ich Videos machen, Gedanken teilen und sichtbarer werden. Genauso lange finde ich Gründe, noch nicht damit anzufangen. Dieser Kanal ist mein Versuch, dieses Muster nicht weiter zu bedienen.
+Seit Jahren will ich Videos machen, Gedanken teilen und sichtbarer werden. Genauso lange finde ich Gründe, noch nicht damit anzufangen. Mit diesem Kanal will ich dieses Muster durchbrechen.
 
 ## Der erste PC und große Pläne
 
@@ -39,7 +39,7 @@ Beruflich lief vieles deutlich besser als im Studium. Ich fing in einem Startup 
 
 Diese Entwicklung zeigte mir, was ich leisten kann. Sie half mir aber auch dabei, die offenen Themen in meinem Leben lange nicht anschauen zu müssen. Solange die Karriere voranging, konnte ich mir sagen, dass ich doch offensichtlich auf dem richtigen Weg war.
 
-Mit der Zeit wurde der Preis dafür deutlicher. Die Arbeit nahm immer mehr Raum ein. Aus einer intensiven Phase wurde die nächste, und auf das eine wichtige Projekt folgte zuverlässig ein weiteres. Selbst wenn etwas gut lief, stellten sich Ruhe und Zufriedenheit nicht automatisch ein.
+Mit der Zeit wurde der Preis dafür deutlicher. Die Arbeit nahm immer mehr Raum ein. Aus einer intensiven Phase wurde die nächste, und nach jedem wichtigen Projekt wartete schon das nächste. Selbst wenn etwas gut lief, wurde ich nicht automatisch ruhiger oder zufriedener.
 
 ## Gute Arbeit spricht nicht immer für sich
 
@@ -53,9 +53,9 @@ Das betrifft nicht nur den Beruf. Videos wollte ich schon seit Jahren machen. Th
 
 Meine ADHS-Diagnose hat mir geholfen, einige Muster besser einzuordnen. Sie erklärt, warum ich mich stundenlang in eine interessante Aufgabe verbeißen kann und gleichzeitig an einer überschaubaren, wichtigen Sache kaum anfange. Auch einen Teil meiner Prokrastination verstehe ich dadurch besser.
 
-Aber eine Erklärung nimmt mir die Entscheidung nicht ab. Ich muss weiterhin Wege finden, mit meiner Energie sinnvoller umzugehen. Nicht mehr jeder verfügbare Gedanke und jede freie Stunde sollen in den nächsten beruflichen Sprint fließen.
+Aber eine Erklärung nimmt mir die Entscheidung nicht ab. Ich muss weiterhin Wege finden, mit meiner Energie sinnvoller umzugehen. Ich will nicht mehr jeden Gedanken und jede freie Stunde in den nächsten beruflichen Sprint stecken.
 
-Dass Veränderung möglich ist, habe ich an anderer Stelle gemerkt. Mein Gewicht lag zeitweise bei ungefähr 125 Kilogramm. Inzwischen bin ich unter 100. Darauf bin ich stolz – nicht weil damit plötzlich alles gelöst wäre, sondern weil dieser Fortschritt real ist und nicht nur in meinem Kopf stattgefunden hat.
+Dass Veränderung möglich ist, habe ich an anderer Stelle gemerkt. Mein Gewicht lag zeitweise bei ungefähr 125 Kilogramm. Inzwischen bin ich unter 100. Darauf bin ich stolz, nicht weil damit plötzlich alles gelöst wäre, sondern weil dieser Fortschritt real ist und nicht nur in meinem Kopf stattgefunden hat.
 
 ## Anfangen, bevor alles geklärt ist
 
@@ -63,8 +63,8 @@ Ich habe ein gutes Leben und viele Gründe, dankbar zu sein. Gleichzeitig möcht
 
 Auf diesem Kanal will ich mich nicht als fertige Version von mir präsentieren. Ich habe weder alle Antworten noch einen perfekten Plan. Stattdessen möchte ich Gedanken festhalten, Fortschritt sichtbar machen und lernen, freier über die Dinge zu sprechen, die mich beschäftigen.
 
-Vielleicht geht es dabei manchmal um Arbeit, Technik oder Kommunikation. Vielleicht um Prokrastination, Gesundheit oder die Frage, wie man sich wieder mehr zutraut. Zunächst zählt für mich nur, dass diese Gedanken nicht weiter ausschließlich in Notizen und angefangenen Projekten liegen bleiben.
+Vielleicht geht es dabei manchmal um Arbeit, Technik oder Kommunikation. Vielleicht um Prokrastination, Gesundheit oder die Frage, wie man sich wieder mehr zutraut. Für den Anfang will ich nur, dass diese Gedanken nicht länger in Notizen und angefangenen Projekten liegen bleiben.
 
-Noch weiß ich nicht genau, was daraus wird. Wenn am Anfang niemand zuschaut, habe ich trotzdem etwas gewonnen: freies Sprechen geübt und eine weitere Ausrede weniger.
+Noch weiß ich nicht genau, was daraus wird. Wenn am Anfang niemand zuschaut, habe ich trotzdem das freie Sprechen geübt und eine Ausrede weniger.
 
 Für den Moment reicht mir etwas viel Banaleres: Die Aufnahme ist gemacht, der Schnitt ist fertig, und ich drücke auf Veröffentlichen.
