@@ -1,10 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { personalInfo } from "../lib/data";
-import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
+import { ChevronDown, Linkedin } from "lucide-react";
 
-export default function Hero() {
+import { getPortfolioData } from "@/lib/data";
+import { getDictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/locales";
+
+export default function Hero({ locale }: { locale: Locale }) {
+    const { personalInfo } = getPortfolioData(locale);
+    const { hero } = getDictionary(locale);
+
     return (
         <section className="relative flex min-h-screen flex-col items-center justify-center pt-20 overflow-hidden">
             <div className="container relative z-10 flex flex-col items-center px-4 md:px-6">
@@ -19,10 +25,10 @@ export default function Hero() {
                             <span className="animate-ping text-blue-400 absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                         </span>
-                        Available for new opportunities
+                        {hero.availability}
                     </div>
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4">
-                        Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">{personalInfo.name}</span>
+                        {hero.greeting} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">{personalInfo.name}</span>
                     </h1>
                     <h2 className="text-xl md:text-3xl text-slate-300 mb-6 font-medium">
                         {personalInfo.title}
@@ -42,7 +48,7 @@ export default function Hero() {
                         href="#projects"
                         className="inline-flex h-12 items-center justify-center rounded-md bg-blue-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500"
                     >
-                        View Projects
+                        {hero.viewProjects}
                     </a>
                     <a
                         href={personalInfo.linkedInUrl}
@@ -62,7 +68,11 @@ export default function Hero() {
                 transition={{ delay: 1, duration: 1 }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"
             >
-                <a href="#about" className="text-slate-500 hover:text-slate-300 transition-colors">
+                <a
+                    href="#about"
+                    aria-label={hero.scrollToAbout}
+                    className="text-slate-500 hover:text-slate-300 transition-colors"
+                >
                     <ChevronDown className="h-8 w-8" />
                 </a>
             </motion.div>

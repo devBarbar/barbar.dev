@@ -1,10 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { projects } from "../lib/data";
 import { ExternalLink, Github } from "lucide-react";
 
-export default function Projects() {
+import { getPortfolioData } from "@/lib/data";
+import { getDictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/locales";
+
+export default function Projects({ locale }: { locale: Locale }) {
+    const { projects } = getPortfolioData(locale);
+    const { projects: copy } = getDictionary(locale);
+
     return (
         <section id="projects" className="py-24 px-4 md:px-6 container mx-auto max-w-6xl">
             <motion.div
@@ -14,10 +20,10 @@ export default function Projects() {
                 transition={{ duration: 0.6 }}
                 className="mb-16"
             >
-                <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured Projects</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-4">{copy.heading}</h2>
                 <div className="h-1 w-20 bg-blue-500 rounded-full mb-8"></div>
                 <p className="max-w-2xl text-slate-400 text-lg">
-                    A selection of recent work I'm proud of, spanning mobile, web, and AI solutions.
+                    {copy.introduction}
                 </p>
             </motion.div>
 
@@ -37,10 +43,18 @@ export default function Projects() {
                                     {project.type}
                                 </span>
                                 <div className="flex gap-2">
-                                    <a href={project.githubUrl} className="text-slate-400 hover:text-white transition-colors" aria-label="Github Repo">
+                                    <a
+                                        href={project.githubUrl}
+                                        className="text-slate-400 hover:text-white transition-colors"
+                                        aria-label={`${copy.githubLabel} ${project.name}`}
+                                    >
                                         <Github className="w-5 h-5" />
                                     </a>
-                                    <a href={project.liveUrl} className="text-slate-400 hover:text-white transition-colors" aria-label="Live Demo">
+                                    <a
+                                        href={project.liveUrl}
+                                        className="text-slate-400 hover:text-white transition-colors"
+                                        aria-label={`${copy.liveLabel} ${project.name}`}
+                                    >
                                         <ExternalLink className="w-5 h-5" />
                                     </a>
                                 </div>

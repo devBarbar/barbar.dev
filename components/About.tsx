@@ -1,14 +1,19 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { experience, education, skills, achievements } from "../lib/data";
+import { getPortfolioData } from "@/lib/data";
+import { getDictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/locales";
 
 const slideUpVariant: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
-export default function About() {
+export default function About({ locale }: { locale: Locale }) {
+    const { experience, skills, achievements } = getPortfolioData(locale);
+    const { about } = getDictionary(locale);
+
     return (
         <section id="about" className="py-24 px-4 md:px-6 container mx-auto max-w-6xl">
             <motion.div
@@ -18,7 +23,7 @@ export default function About() {
                 variants={slideUpVariant}
                 className="mb-16"
             >
-                <h2 className="text-3xl md:text-5xl font-bold mb-4">Experience & Background</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-4">{about.heading}</h2>
                 <div className="h-1 w-20 bg-blue-500 rounded-full mb-8"></div>
             </motion.div>
 
@@ -32,7 +37,7 @@ export default function About() {
                         variants={slideUpVariant}
                     >
                         <h3 className="text-2xl font-semibold mb-6 flex items-center">
-                            <span className="text-blue-400 mr-3">Brief History</span>
+                            <span className="text-blue-400 mr-3">{about.history}</span>
                         </h3>
                         <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
                             {experience.map((exp, idx) => (
@@ -63,7 +68,7 @@ export default function About() {
                         viewport={{ once: true, margin: "-100px" }}
                         variants={slideUpVariant}
                     >
-                        <h3 className="text-2xl font-semibold mb-6">Technical Arsenal</h3>
+                        <h3 className="text-2xl font-semibold mb-6">{about.skills}</h3>
                         <div className="space-y-6">
                             {skills.map((category, idx) => (
                                 <div key={idx} className="glass p-5 rounded-xl border-slate-800">
@@ -87,7 +92,7 @@ export default function About() {
                         viewport={{ once: true, margin: "-100px" }}
                         variants={slideUpVariant}
                     >
-                        <h3 className="text-2xl font-semibold mb-6">Key Achievements</h3>
+                        <h3 className="text-2xl font-semibold mb-6">{about.achievements}</h3>
                         <ul className="space-y-4">
                             {achievements.map((item, idx) => (
                                 <li key={idx} className="flex gap-3 text-sm text-slate-300 items-start">

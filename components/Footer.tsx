@@ -1,10 +1,14 @@
-"use client";
+import { Linkedin, Youtube } from "lucide-react";
 
-import { personalInfo } from "../lib/data";
-import { Linkedin } from "lucide-react";
+import { getPortfolioData } from "@/lib/data";
+import { getDictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/locales";
+import { youtubeChannel } from "@/lib/youtube";
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
     const year = new Date().getFullYear();
+    const { personalInfo } = getPortfolioData(locale);
+    const { footer, nav } = getDictionary(locale);
 
     return (
         <footer className="border-t border-slate-800 bg-black/50 backdrop-blur-md">
@@ -15,7 +19,7 @@ export default function Footer() {
                             {personalInfo.name}
                         </h2>
                         <p className="text-slate-500 mt-2 text-sm">
-                            Building scalable, high-quality software solutions.
+                            {footer.tagline}
                         </p>
                     </div>
 
@@ -29,11 +33,20 @@ export default function Footer() {
                         >
                             <Linkedin className="w-5 h-5" />
                         </a>
+                        <a
+                            href={youtubeChannel.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={nav.youtube}
+                            className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-slate-400 shadow-lg transition-all hover:scale-110 hover:bg-red-600 hover:text-white"
+                        >
+                            <Youtube aria-hidden="true" className="h-5 w-5" />
+                        </a>
                     </div>
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-slate-800 text-center text-sm text-slate-500">
-                    <p>© {year} {personalInfo.name}. All rights reserved.</p>
+                    <p>© {year} {personalInfo.name}. {footer.rights}</p>
                 </div>
             </div>
         </footer>

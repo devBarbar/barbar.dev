@@ -16,7 +16,11 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The portfolio is available in English at `/en` and German at `/de`.
+
+## Publishing a blog post
+
+Add a Markdown file to `content/blog/en` or `content/blog/de`. Its filename becomes the URL slug, and published posts are discovered automatically during the next build. See [`content/blog/README.md`](content/blog/README.md) for the front matter template and translation convention.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
