@@ -15,8 +15,8 @@ export default function Hero({ locale }: { locale: Locale }) {
         <section className="relative flex min-h-screen flex-col items-center justify-center pt-20 overflow-hidden">
             <div className="container relative z-10 flex flex-col items-center px-4 md:px-6">
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ y: 30 }}
+                    animate={{ y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center"
                 >
@@ -39,8 +39,8 @@ export default function Hero({ locale }: { locale: Locale }) {
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ y: 20 }}
+                    animate={{ y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                     className="flex flex-wrap gap-4 justify-center"
                 >
