@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 
+import JsonLd from "@/components/JsonLd";
 import Navigation from "@/components/Navigation";
 import { getAllPosts, getPostTranslation } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
 import { isLocale, locales } from "@/lib/locales";
+import { getFeedPath, siteConfig, siteJsonLd } from "@/lib/seo";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,12 +29,20 @@ export async function generateMetadata({
   const otherLocale = locale === "en" ? "de" : "en";
 
   return {
-    metadataBase: new URL("https://barbar.dev"),
+    metadataBase: new URL(siteConfig.url),
     title: {
       default: metadata.title,
       template: `%s | Barbar Ahmad`,
     },
     description: metadata.description,
+    authors: [
+      {
+        name: siteConfig.authorName,
+        url: "/en#about",
+      },
+    ],
+    creator: siteConfig.authorName,
+    publisher: siteConfig.authorName,
     alternates: {
       canonical: `/${locale}`,
       languages: {
@@ -40,10 +50,24 @@ export async function generateMetadata({
         de: "/de",
         "x-default": "/en",
       },
+      types: {
+        "application/rss+xml": getFeedPath(locale),
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
     openGraph: {
       type: "website",
-      siteName: "Barbar Ahmad",
+      siteName: siteConfig.name,
       title: metadata.title,
       description: metadata.description,
       url: `/${locale}`,
@@ -51,9 +75,7 @@ export async function generateMetadata({
       alternateLocale: otherLocale === "de" ? "de_DE" : "en_US",
       images: [
         {
-          url: "/og.png",
-          width: 1731,
-          height: 909,
+          ...siteConfig.defaultImage,
           alt: metadata.ogImageAlt,
         },
       ],
@@ -62,7 +84,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: metadata.title,
       description: metadata.description,
-      images: ["/og.png"],
+      images: [siteConfig.defaultImage.url],
     },
   };
 }
@@ -90,6 +112,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="dark" data-scroll-behavior="smooth">
       <body className={`${inter.className} min-h-screen bg-background text-foreground antialiased selection:bg-primary/30`}>
+        <JsonLd data={siteJsonLd} />
         <a
           href="#main-content"
           className="fixed left-4 top-3 z-[60] -translate-y-20 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-transform focus:translate-y-0"

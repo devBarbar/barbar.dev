@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
     },
     sitemap: "https://barbar.dev/sitemap.xml",
+    host: "https://barbar.dev",
   };
 }

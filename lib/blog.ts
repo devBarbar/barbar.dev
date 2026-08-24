@@ -26,15 +26,47 @@ const dateSchema = z
     "date must use YYYY-MM-DD",
   );
 
-const frontmatterSchema = z.strictObject({
-  title: z.string().trim().min(1).max(120),
-  description: z.string().trim().min(1).max(220),
-  date: dateSchema,
-  tags: z.array(z.string().trim().min(1).max(40)).max(10).default([]),
-  published: z.boolean().default(true),
-  translationKey: z.string().regex(slugPattern).optional(),
-  youtubeVideoId: z.string().regex(videoIdPattern).optional(),
-});
+const featuredImagePattern = /^\/(?!\/).+\.(?:avif|gif|jpe?g|png|webp)$/i;
+
+const frontmatterSchema = z
+  .strictObject({
+    title: z.string().trim().min(1).max(120),
+    description: z.string().trim().min(1).max(220),
+    date: dateSchema,
+    updated: dateSchema.optional(),
+    tags: z.array(z.string().trim().min(1).max(40)).max(10).default([]),
+    published: z.boolean(),
+    translationKey: z.string().regex(slugPattern).optional(),
+    featuredImage: z.string().trim().regex(featuredImagePattern).optional(),
+    featuredImageAlt: z.string().trim().min(1).max(180).optional(),
+    youtubeVideoId: z.string().regex(videoIdPattern).optional(),
+    youtubeVideoUploadDate: dateSchema.optional(),
+  })
+  .superRefine((data, context) => {
+    if (data.updated && data.updated < data.date) {
+      context.addIssue({
+        code: "custom",
+        path: ["updated"],
+        message: "updated must be on or after date",
+      });
+    }
+
+    if (Boolean(data.featuredImage) !== Boolean(data.featuredImageAlt)) {
+      context.addIssue({
+        code: "custom",
+        path: data.featuredImage ? ["featuredImageAlt"] : ["featuredImage"],
+        message: "featuredImage and featuredImageAlt must be provided together",
+      });
+    }
+
+    if (data.youtubeVideoUploadDate && !data.youtubeVideoId) {
+      context.addIssue({
+        code: "custom",
+        path: ["youtubeVideoUploadDate"],
+        message: "youtubeVideoUploadDate requires youtubeVideoId",
+      });
+    }
+  });
 
 export type BlogPostSummary = {
   slug: string;
@@ -42,10 +74,14 @@ export type BlogPostSummary = {
   title: string;
   description: string;
   date: string;
+  updated?: string;
   tags: string[];
   readingMinutes: number;
   translationKey: string;
+  featuredImage?: string;
+  featuredImageAlt?: string;
   youtubeVideoId?: string;
+  youtubeVideoUploadDate?: string;
 };
 
 export type BlogPost = BlogPostSummary & {
@@ -103,20 +139,36 @@ function readPost(locale: Locale, fileName: string): BlogPost | null {
     title: parsed.data.title,
     description: parsed.data.description,
     date: parsed.data.date,
+    updated: parsed.data.updated,
     tags: parsed.data.tags,
     readingMinutes: Math.max(1, Math.ceil(wordCount / 220)),
     translationKey: parsed.data.translationKey ?? slug,
+    featuredImage: parsed.data.featuredImage,
+    featuredImageAlt: parsed.data.featuredImageAlt,
     youtubeVideoId: parsed.data.youtubeVideoId,
+    youtubeVideoUploadDate: parsed.data.youtubeVideoUploadDate,
     content,
   };
 }
 
-const readPostsForLocale = cache((locale: Locale): BlogPost[] =>
-  getMarkdownFiles(locale)
+const readPostsForLocale = cache((locale: Locale): BlogPost[] => {
+  const posts = getMarkdownFiles(locale)
     .map((fileName) => readPost(locale, fileName))
-    .filter((post): post is BlogPost => post !== null)
-    .sort((a, b) => b.date.localeCompare(a.date)),
-);
+    .filter((post): post is BlogPost => post !== null);
+  const translationKeys = new Set<string>();
+
+  for (const post of posts) {
+    if (translationKeys.has(post.translationKey)) {
+      throw new Error(
+        `Duplicate translationKey "${post.translationKey}" in ${locale} blog posts.`,
+      );
+    }
+
+    translationKeys.add(post.translationKey);
+  }
+
+  return posts.sort((a, b) => b.date.localeCompare(a.date));
+});
 
 export function getAllPosts(locale: Locale): BlogPostSummary[] {
   return readPostsForLocale(locale).map((post) => ({
@@ -125,10 +177,14 @@ export function getAllPosts(locale: Locale): BlogPostSummary[] {
     title: post.title,
     description: post.description,
     date: post.date,
+    updated: post.updated,
     tags: post.tags,
     readingMinutes: post.readingMinutes,
     translationKey: post.translationKey,
+    featuredImage: post.featuredImage,
+    featuredImageAlt: post.featuredImageAlt,
     youtubeVideoId: post.youtubeVideoId,
+    youtubeVideoUploadDate: post.youtubeVideoUploadDate,
   }));
 }
 

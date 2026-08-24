@@ -11,6 +11,7 @@ tags:
 published: true
 translationKey: "career-success-still-stuck"
 youtubeVideoId: "AcTmnFGPzwg"
+youtubeVideoUploadDate: "2026-08-23"
 ---
 
 From the outside, my life probably looks pretty put together. I work in software development, have taken on responsibility, and have achieved a lot professionally that I can be proud of. Even so, I have long felt that I am not really moving forward in some important areas of my life.

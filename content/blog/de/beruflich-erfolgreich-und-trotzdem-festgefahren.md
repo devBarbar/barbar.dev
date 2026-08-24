@@ -11,6 +11,7 @@ tags:
 published: true
 translationKey: "career-success-still-stuck"
 youtubeVideoId: "AcTmnFGPzwg"
+youtubeVideoUploadDate: "2026-08-23"
 ---
 
 Von außen sieht mein Leben wahrscheinlich ziemlich ordentlich aus. Ich arbeite in der Softwareentwicklung, habe Verantwortung übernommen und beruflich vieles erreicht, worauf ich stolz sein kann. Trotzdem begleitet mich schon lange das Gefühl, an einigen wichtigen Stellen nicht wirklich voranzukommen.

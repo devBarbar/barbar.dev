@@ -2,52 +2,61 @@ import type { MetadataRoute } from "next";
 
 import { getAllPosts, getPostTranslation } from "@/lib/blog";
 import { locales } from "@/lib/locales";
-
-const siteUrl = "https://barbar.dev";
+import { siteConfig } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) => [
-    {
-      url: `${siteUrl}/${locale}`,
-      changeFrequency: "monthly",
-      priority: 1,
-      alternates: {
-        languages: {
-          en: `${siteUrl}/en`,
-          de: `${siteUrl}/de`,
-        },
+  const latestPostDate = locales
+    .flatMap((locale) => getAllPosts(locale))
+    .map((post) => post.updated ?? post.date)
+    .sort((a, b) => b.localeCompare(a))[0];
+  const staticRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) => {
+    const homeLanguages = {
+      en: `${siteConfig.url}/en`,
+      de: `${siteConfig.url}/de`,
+      "x-default": `${siteConfig.url}/en`,
+    };
+    const blogLanguages = {
+      en: `${siteConfig.url}/en/blog`,
+      de: `${siteConfig.url}/de/blog`,
+      "x-default": `${siteConfig.url}/en/blog`,
+    };
+
+    return [
+      {
+        url: `${siteConfig.url}/${locale}`,
+        alternates: { languages: homeLanguages },
       },
-    },
-    {
-      url: `${siteUrl}/${locale}/blog`,
-      changeFrequency: "weekly",
-      priority: 0.8,
-      alternates: {
-        languages: {
-          en: `${siteUrl}/en/blog`,
-          de: `${siteUrl}/de/blog`,
-        },
+      {
+        url: `${siteConfig.url}/${locale}/blog`,
+        ...(latestPostDate
+          ? { lastModified: new Date(`${latestPostDate}T00:00:00.000Z`) }
+          : {}),
+        alternates: { languages: blogLanguages },
       },
-    },
-  ]);
+    ];
+  });
 
   const postRoutes: MetadataRoute.Sitemap = locales.flatMap((locale) =>
     getAllPosts(locale).map((post) => {
       const otherLocale = locale === "en" ? "de" : "en";
       const translation = getPostTranslation(post, otherLocale);
       const languages: Record<string, string> = {
-        [locale]: `${siteUrl}/${locale}/blog/${post.slug}`,
+        [locale]: `${siteConfig.url}/${locale}/blog/${post.slug}`,
       };
 
       if (translation) {
-        languages[otherLocale] = `${siteUrl}/${otherLocale}/blog/${translation.slug}`;
+        languages[otherLocale] = `${siteConfig.url}/${otherLocale}/blog/${translation.slug}`;
+      }
+
+      if (locale === "en") {
+        languages["x-default"] = `${siteConfig.url}/en/blog/${post.slug}`;
+      } else if (translation && otherLocale === "en") {
+        languages["x-default"] = `${siteConfig.url}/en/blog/${translation.slug}`;
       }
 
       return {
-        url: `${siteUrl}/${locale}/blog/${post.slug}`,
-        lastModified: new Date(`${post.date}T00:00:00.000Z`),
-        changeFrequency: "monthly" as const,
-        priority: 0.7,
+        url: `${siteConfig.url}/${locale}/blog/${post.slug}`,
+        lastModified: new Date(`${post.updated ?? post.date}T00:00:00.000Z`),
         alternates: { languages },
       };
     }),

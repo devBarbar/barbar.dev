@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:seo && next build",
+    "check:seo": "node scripts/check-blog-seo.mjs",
     "start": "next start",
     "lint": "eslint"
   },

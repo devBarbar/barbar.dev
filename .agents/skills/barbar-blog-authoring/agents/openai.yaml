@@ -1,0 +1,6 @@
+interface:
+  display_name: "Barbar Blog Authoring"
+  short_description: "Publish SEO-ready barbar.dev blog posts"
+  default_prompt: "Use $barbar-blog-authoring to add or improve a barbar.dev blog post."
+policy:
+  allow_implicit_invocation: true

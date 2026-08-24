@@ -32,8 +32,8 @@ const dictionaries = {
       liveLabel: "Open live demo for",
     },
     blog: {
-      eyebrow: "Work, growth & technology",
-      title: "Blog",
+      eyebrow: "Barbar Ahmad's blog",
+      title: "Software engineering, career & personal growth",
       introduction:
         "Personal essays and practical notes on software engineering, career, communication, and making meaningful progress.",
       latest: "Latest writing",
@@ -43,11 +43,15 @@ const dictionaries = {
       readMore: "Read article",
       minutes: "min read",
       published: "Published",
+      updated: "Updated",
+      by: "By",
       noPosts: "No posts have been published yet.",
       backToBlog: "Back to all posts",
       readTranslation: "Read this article in German",
       tagsLabel: "Tags",
       videoLabel: "Video",
+      breadcrumbsLabel: "Breadcrumbs",
+      rssLabel: "Subscribe to the English blog RSS feed",
     },
     footer: {
       tagline: "Building scalable, high-quality software solutions.",
@@ -66,7 +70,7 @@ const dictionaries = {
       title: "Barbar Ahmad | Lead Software Engineer",
       description:
         "Portfolio, blog, and YouTube channel of Barbar Ahmad, Lead Software Engineer in Frankfurt, Germany.",
-      blogTitle: "Blog",
+      blogTitle: "Software Engineering, Career & Personal Growth Blog",
       blogDescription:
         "Personal essays and practical notes from Barbar Ahmad on software engineering, career, communication, and personal growth.",
       ogImageAlt: "Barbar Ahmad — Lead Software Engineer · Engineering Blog",
@@ -103,8 +107,8 @@ const dictionaries = {
       liveLabel: "Live-Demo öffnen für",
     },
     blog: {
-      eyebrow: "Arbeit, Entwicklung & Technologie",
-      title: "Blog",
+      eyebrow: "Barbar Ahmads Blog",
+      title: "Softwareentwicklung, Karriere & persönliche Entwicklung",
       introduction:
         "Persönliche Essays und praxisnahe Beiträge über Softwareentwicklung, Karriere, Kommunikation und echten Fortschritt.",
       latest: "Neueste Beiträge",
@@ -114,11 +118,15 @@ const dictionaries = {
       readMore: "Artikel lesen",
       minutes: "Min. Lesezeit",
       published: "Veröffentlicht",
+      updated: "Aktualisiert",
+      by: "Von",
       noPosts: "Noch wurden keine Beiträge veröffentlicht.",
       backToBlog: "Zurück zu allen Beiträgen",
       readTranslation: "Diesen Artikel auf Englisch lesen",
       tagsLabel: "Schlagwörter",
       videoLabel: "Video",
+      breadcrumbsLabel: "Brotkrümelnavigation",
+      rssLabel: "Deutschen Blog-RSS-Feed abonnieren",
     },
     footer: {
       tagline: "Skalierbare Softwarelösungen mit hohem Qualitätsanspruch.",
@@ -137,7 +145,7 @@ const dictionaries = {
       title: "Barbar Ahmad | Lead Softwareentwickler",
       description:
         "Portfolio, Blog und YouTube-Kanal von Barbar Ahmad, Lead Softwareentwickler in Frankfurt am Main.",
-      blogTitle: "Blog",
+      blogTitle: "Blog über Softwareentwicklung, Karriere & persönliche Entwicklung",
       blogDescription:
         "Persönliche Essays und praxisnahe Beiträge von Barbar Ahmad über Softwareentwicklung, Karriere, Kommunikation und persönliche Entwicklung.",
       ogImageAlt: "Barbar Ahmad — Lead Softwareentwickler · Engineering-Blog",

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Barbar SEO Maintenance"
+  short_description: "Keep barbar.dev technical SEO healthy"
+  default_prompt: "Use $barbar-seo-maintenance to audit or update barbar.dev SEO."
+policy:
+  allow_implicit_invocation: true

@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 
 import BlogCard from "@/components/BlogCard";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
 import { getAllPosts } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
 import { isLocale } from "@/lib/locales";
+import { getBlogJsonLd, getFeedPath, siteConfig } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -28,25 +30,30 @@ export async function generateMetadata({
         de: "/de/blog",
         "x-default": "/en/blog",
       },
+      types: {
+        "application/rss+xml": getFeedPath(locale),
+      },
     },
     openGraph: {
+      type: "website",
+      siteName: siteConfig.name,
       title: metadata.blogTitle,
       description: metadata.blogDescription,
       url: `/${locale}/blog`,
       locale: locale === "de" ? "de_DE" : "en_US",
+      alternateLocale: locale === "de" ? "en_US" : "de_DE",
       images: [
         {
-          url: "/og.png",
-          width: 1731,
-          height: 909,
+          ...siteConfig.defaultImage,
           alt: metadata.ogImageAlt,
         },
       ],
     },
     twitter: {
+      card: "summary_large_image",
       title: metadata.blogTitle,
       description: metadata.blogDescription,
-      images: ["/og.png"],
+      images: [siteConfig.defaultImage.url],
     },
   };
 }
@@ -62,9 +69,16 @@ export default async function BlogIndex({
 
   const posts = getAllPosts(locale);
   const { blog } = getDictionary(locale);
+  const jsonLd = getBlogJsonLd({
+    locale,
+    title: blog.title,
+    description: blog.introduction,
+    posts,
+  });
 
   return (
     <>
+      <JsonLd data={jsonLd} />
       <main id="main-content" className="min-h-screen px-4 pb-24 pt-36 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <header className="mb-14 max-w-3xl">
@@ -76,7 +90,7 @@ export default async function BlogIndex({
           {posts.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {posts.map((post) => (
-                <BlogCard key={post.slug} post={post} locale={locale} />
+                <BlogCard key={post.slug} post={post} locale={locale} headingLevel={2} />
               ))}
             </div>
           ) : (

@@ -51,7 +51,7 @@ export default function Navigation({
         <Link
           href={`/${locale}`}
           className="text-lg font-black tracking-tight text-white transition-colors hover:text-blue-400"
-          aria-label={nav.home}
+          aria-label={`barbar.dev — ${nav.home}`}
         >
           barbar<span className="text-blue-400">.dev</span>
         </Link>

@@ -15,15 +15,18 @@ function formatDate(date: string, locale: Locale) {
 export default function BlogCard({
   post,
   locale,
+  headingLevel = 3,
 }: {
   post: BlogPostSummary;
   locale: Locale;
+  headingLevel?: 2 | 3;
 }) {
   const { blog } = getDictionary(locale);
+  const Heading = headingLevel === 2 ? "h2" : "h3";
 
   return (
     <article className="group glass flex h-full flex-col rounded-2xl border-slate-800 p-6 transition-all hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-950/30">
-      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
+      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-400">
         <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
         <span className="inline-flex items-center gap-1.5">
           <Clock3 aria-hidden="true" className="h-3.5 w-3.5" />
@@ -37,9 +40,9 @@ export default function BlogCard({
         )}
       </div>
 
-      <h3 className="mb-3 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-blue-300">
+      <Heading className="mb-3 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-blue-300">
         <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
-      </h3>
+      </Heading>
       <p className="mb-6 flex-grow leading-relaxed text-slate-400">{post.description}</p>
 
       {post.tags.length > 0 && (
