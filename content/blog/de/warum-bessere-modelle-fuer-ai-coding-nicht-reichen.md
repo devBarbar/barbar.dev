@@ -13,6 +13,8 @@ published: true
 translationKey: "ai-coding-needs-software-architecture"
 featuredImage: "/blog/warum-bessere-modelle-fuer-ai-coding-nicht-reichen/cover.jpg"
 featuredImageAlt: "Porträt des Autors in warmem Filmlook, überlagert von einem schwarzen Pinselstrich und dem Wort Grenzen."
+youtubeVideoId: "0z-z-bVgt5Y"
+youtubeVideoUploadDate: "2026-08-26"
 ---
 
 AI Agents können heute in kurzer Zeit erstaunlich viel Code verändern. Genau deshalb werde ich bei Softwarearchitektur strenger, nicht lockerer.
