@@ -3,6 +3,7 @@ import { Linkedin, Rss, Youtube } from "lucide-react";
 import { getPortfolioData } from "@/lib/data";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/locales";
+import { getFeedPath } from "@/lib/seo";
 import { youtubeChannel } from "@/lib/youtube";
 
 export default function Footer({ locale }: { locale: Locale }) {
@@ -25,7 +26,7 @@ export default function Footer({ locale }: { locale: Locale }) {
 
                     <div className="flex items-center gap-4">
                         <a
-                            href={`/${locale}/blog/feed.xml`}
+                            href={getFeedPath(locale)}
                             aria-label={blog.rssLabel}
                             className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-slate-400 shadow-lg transition-all hover:scale-110 hover:bg-orange-600 hover:text-white"
                         >

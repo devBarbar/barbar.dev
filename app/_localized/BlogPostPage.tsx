@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Clock3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,18 +8,10 @@ import remarkGfm from "remark-gfm";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import VideoEmbed from "@/components/VideoEmbed";
-import { getAllPosts, getPost, getPostTranslation } from "@/lib/blog";
+import { getPost, getPostTranslation } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
-import { isLocale, locales, type Locale } from "@/lib/locales";
-import { getFeedPath, getPostImage, getPostJsonLd, siteConfig } from "@/lib/seo";
-
-export const dynamicParams = false;
-
-export function generateStaticParams({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return [];
-
-  return getAllPosts(params.locale).map((post) => ({ slug: post.slug }));
-}
+import { getLocalizedPath, type Locale } from "@/lib/locales";
+import { getPostJsonLd, siteConfig } from "@/lib/seo";
 
 function formatDate(date: string, locale: Locale) {
   return new Intl.DateTimeFormat(locale === "de" ? "de-DE" : "en-US", {
@@ -29,89 +20,13 @@ function formatDate(date: string, locale: Locale) {
   }).format(new Date(`${date}T00:00:00Z`));
 }
 
-export async function generateMetadata({
-  params,
+export default function BlogPostPage({
+  locale,
+  slug,
 }: {
-  params: Promise<{ locale: string; slug: string }>;
-}): Promise<Metadata> {
-  const { locale, slug } = await params;
-
-  if (!isLocale(locale)) return {};
-
-  const post = getPost(locale, slug);
-
-  if (!post) return {};
-
-  const otherLocale = locales.find((candidate) => candidate !== locale);
-  const translatedPost = otherLocale ? getPostTranslation(post, otherLocale) : undefined;
-  const languages: Record<string, string> = {
-    [locale]: `/${locale}/blog/${slug}`,
-  };
-
-  if (translatedPost && otherLocale) {
-    languages[otherLocale] = `/${otherLocale}/blog/${translatedPost.slug}`;
-  }
-
-  if (locale === "en") {
-    languages["x-default"] = `/en/blog/${slug}`;
-  } else if (otherLocale === "en" && translatedPost) {
-    languages["x-default"] = `/en/blog/${translatedPost.slug}`;
-  }
-
-  const postImage = getPostImage(post);
-
-  return {
-    title: post.title,
-    description: post.description,
-    authors: [
-      {
-        name: siteConfig.authorName,
-        url: `/${locale}#about`,
-      },
-    ],
-    creator: siteConfig.authorName,
-    publisher: siteConfig.authorName,
-    category: post.tags[0],
-    alternates: {
-      canonical: `/${locale}/blog/${slug}`,
-      languages,
-      types: {
-        "application/rss+xml": getFeedPath(locale),
-      },
-    },
-    openGraph: {
-      type: "article",
-      siteName: siteConfig.name,
-      title: post.title,
-      description: post.description,
-      url: `/${locale}/blog/${slug}`,
-      locale: locale === "de" ? "de_DE" : "en_US",
-      alternateLocale: locale === "de" ? "en_US" : "de_DE",
-      publishedTime: `${post.date}T00:00:00.000Z`,
-      modifiedTime: `${post.updated ?? post.date}T00:00:00.000Z`,
-      authors: [`/${locale}#about`],
-      section: post.tags[0],
-      tags: post.tags,
-      images: postImage ? [{ url: postImage.url, alt: postImage.alt }] : [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.description,
-      images: postImage ? [{ url: postImage.url, alt: postImage.alt }] : [],
-    },
-  };
-}
-
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
+  locale: Locale;
+  slug: string;
 }) {
-  const { locale, slug } = await params;
-
-  if (!isLocale(locale)) notFound();
-
   const post = getPost(locale, slug);
 
   if (!post) notFound();
@@ -119,6 +34,8 @@ export default async function BlogPostPage({
   const { blog, nav, youtube } = getDictionary(locale);
   const otherLocale = locale === "en" ? "de" : "en";
   const translation = getPostTranslation(post, otherLocale);
+  const homePath = getLocalizedPath(locale);
+  const blogPath = getLocalizedPath(locale, "/blog");
   const jsonLd = getPostJsonLd({
     post,
     homeLabel: nav.home,
@@ -133,13 +50,13 @@ export default async function BlogPostPage({
           <nav aria-label={blog.breadcrumbsLabel} className="mb-12">
             <ol className="flex min-w-0 items-center gap-2 text-sm text-slate-400">
               <li>
-                <Link href={`/${locale}`} className="transition-colors hover:text-blue-300">
+                <Link href={homePath} className="transition-colors hover:text-blue-300">
                   {nav.home}
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li>
-                <Link href={`/${locale}/blog`} className="transition-colors hover:text-blue-300">
+                <Link href={blogPath} className="transition-colors hover:text-blue-300">
                   {nav.blog}
                 </Link>
               </li>
@@ -154,7 +71,7 @@ export default async function BlogPostPage({
             <div className="mb-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
               <span>
                 {blog.by}{" "}
-                <Link rel="author" href={`/${locale}/#about`} className="font-medium text-blue-300 hover:text-blue-200">
+                <Link rel="author" href={`${homePath}#about`} className="font-medium text-blue-300 hover:text-blue-200">
                   {siteConfig.authorName}
                 </Link>
               </span>
@@ -184,7 +101,7 @@ export default async function BlogPostPage({
             )}
             {translation && (
               <Link
-                href={`/${otherLocale}/blog/${translation.slug}`}
+                href={getLocalizedPath(otherLocale, `/blog/${translation.slug}`)}
                 hrefLang={otherLocale}
                 className="mt-7 inline-flex text-sm font-semibold text-blue-400 transition-colors hover:text-blue-300"
               >
@@ -212,6 +129,7 @@ export default async function BlogPostPage({
               videoId={post.youtubeVideoId}
               videoUrl={`https://www.youtube.com/watch?v=${post.youtubeVideoId}`}
               title={post.title}
+              playLabel={youtube.playVideo}
               watchLabel={youtube.watchVideo}
               className="mb-14"
             />

@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import About from "@/components/About";
 import BlogPreview from "@/components/BlogPreview";
 import Footer from "@/components/Footer";
@@ -7,17 +5,9 @@ import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import YouTubeSpotlight from "@/components/YouTubeSpotlight";
 import { getAllPosts } from "@/lib/blog";
-import { isLocale } from "@/lib/locales";
+import type { Locale } from "@/lib/locales";
 
-export default async function Home({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
-  if (!isLocale(locale)) notFound();
-
+export default function HomePage({ locale }: { locale: Locale }) {
   const latestPosts = getAllPosts(locale).slice(0, 3);
 
   return (

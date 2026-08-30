@@ -1,14 +1,6 @@
-"use client";
-
-import { motion, type Variants } from "framer-motion";
 import { getPortfolioData } from "@/lib/data";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/locales";
-
-const slideUpVariant: Variants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
 
 export default function About({ locale }: { locale: Locale }) {
     const { experience, skills, achievements } = getPortfolioData(locale);
@@ -16,26 +8,15 @@ export default function About({ locale }: { locale: Locale }) {
 
     return (
         <section id="about" className="py-24 px-4 md:px-6 container mx-auto max-w-6xl">
-            <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={slideUpVariant}
-                className="mb-16"
-            >
+            <div className="home-view-reveal mb-16">
                 <h2 className="text-3xl md:text-5xl font-bold mb-4">{about.heading}</h2>
                 <div className="h-1 w-20 bg-blue-500 rounded-full mb-8"></div>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2 space-y-12">
                     {/* Experience Timeline */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={slideUpVariant}
-                    >
+                    <div className="home-view-reveal">
                         <h3 className="text-2xl font-semibold mb-6 flex items-center">
                             <span className="text-blue-400 mr-3">{about.history}</span>
                         </h3>
@@ -56,18 +37,13 @@ export default function About({ locale }: { locale: Locale }) {
                                 </div>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
 
                 </div>
 
                 <div className="space-y-12">
                     {/* Skills */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={slideUpVariant}
-                    >
+                    <div className="home-view-reveal">
                         <h3 className="text-2xl font-semibold mb-6">{about.skills}</h3>
                         <div className="space-y-6">
                             {skills.map((category, idx) => (
@@ -83,15 +59,10 @@ export default function About({ locale }: { locale: Locale }) {
                                 </div>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
 
                     {/* Key Achievements */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={slideUpVariant}
-                    >
+                    <div className="home-view-reveal">
                         <h3 className="text-2xl font-semibold mb-6">{about.achievements}</h3>
                         <ul className="space-y-4">
                             {achievements.map((item, idx) => (
@@ -101,7 +72,7 @@ export default function About({ locale }: { locale: Locale }) {
                                 </li>
                             ))}
                         </ul>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

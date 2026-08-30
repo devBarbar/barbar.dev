@@ -34,6 +34,7 @@ export default function YouTubeSpotlight({ locale }: { locale: Locale }) {
           videoId={featuredVideo.id}
           videoUrl={featuredVideo.url}
           title={youtube.playerTitle}
+          playLabel={youtube.playVideo}
           watchLabel={youtube.watchVideo}
         />
       </div>

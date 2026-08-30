@@ -1,14 +1,7 @@
 import { getAllPosts } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
-import { isLocale, locales } from "@/lib/locales";
+import { getLocalizedPath, type Locale } from "@/lib/locales";
 import { absoluteUrl, getFeedPath, siteConfig } from "@/lib/seo";
-
-export const dynamic = "force-static";
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
 
 function escapeXml(value: string) {
   return value
@@ -23,26 +16,19 @@ function toRfc822Date(date: string) {
   return new Date(`${date}T00:00:00.000Z`).toUTCString();
 }
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ locale: string }> },
-) {
-  const { locale } = await params;
-
-  if (!isLocale(locale)) {
-    return new Response("Not found", { status: 404 });
-  }
-
+export function createBlogFeed(locale: Locale) {
   const posts = getAllPosts(locale);
   const { metadata } = getDictionary(locale);
-  const blogUrl = absoluteUrl(`/${locale}/blog`);
+  const blogUrl = absoluteUrl(getLocalizedPath(locale, "/blog"));
   const feedUrl = absoluteUrl(getFeedPath(locale));
   const lastModified = posts
     .map((post) => post.updated ?? post.date)
     .sort((a, b) => b.localeCompare(a))[0];
   const items = posts
     .map((post) => {
-      const postUrl = absoluteUrl(`/${locale}/blog/${post.slug}`);
+      const postUrl = absoluteUrl(
+        getLocalizedPath(locale, `/blog/${post.slug}`),
+      );
       const categories = post.tags
         .map((tag) => `<category>${escapeXml(tag)}</category>`)
         .join("");

@@ -1,6 +1,6 @@
 # barbar.dev SEO playbook
 
-Last reviewed: 2026-08-24
+Last reviewed: 2026-08-30
 
 This document records the SEO contract for barbar.dev. Technical SEO helps Google discover and understand the site; it cannot guarantee rankings. The main long-term lever is a focused body of useful, original writing based on Barbar's first-hand engineering and leadership experience.
 
@@ -10,10 +10,15 @@ This document records the SEO contract for barbar.dev. Technical SEO helps Googl
 - English and German equivalents publish reciprocal `hreflang` links, including self-references and an English `x-default` where an English version exists.
 - Published pages appear in `/sitemap.xml`. Article `lastmod` is `updated` when present, otherwise `date`; do not change it for cosmetic edits.
 - `/robots.txt` allows production crawling and points to the sitemap.
-- Blog indexes advertise their localized RSS feeds at `/{locale}/blog/feed.xml`.
+- The canonical English routes are unprefixed (`/`, `/blog`, and
+  `/blog/{slug}`); German routes use `/de`.
+- Blog indexes advertise the English feed at `/blog/feed.xml` and the German
+  feed at `/de/blog/feed.xml`.
 - Article pages publish visible authorship and dates plus `BlogPosting`, `BreadcrumbList`, and—only with accurate upload data—`VideoObject` JSON-LD.
 - A post uses its own featured image or YouTube thumbnail for article previews. Do not use the generic site card as an article image when the article has no representative image.
-- Root and URL-case normalization use permanent redirects. Unknown locales and slugs return real 404 responses.
+- Legacy `/en` routes redirect directly to their unprefixed equivalents with a
+  permanent `308`. URL-case normalization also uses `308`; unknown locales and
+  slugs return real 404 responses.
 - Google may use large image and unrestricted snippet/video previews through the site-wide robots metadata.
 
 `npm run check:seo` validates the content-side invariants. It runs automatically before `npm run build`.
@@ -48,7 +53,7 @@ These steps require access to the production domain and Google Search Console:
 
 1. Verify a domain property for `barbar.dev`.
 2. Submit `https://barbar.dev/sitemap.xml`.
-3. Inspect `/en`, `/de`, both blog indexes, and new articles; request indexing for important new or substantially updated pages.
+3. Inspect `/`, `/de`, both blog indexes, and new articles; request indexing for important new or substantially updated pages.
 4. Monitor Page Indexing, Performance, Enhancements, and Core Web Vitals. The public `site:` operator is not an exhaustive index check.
 5. Optionally configure `www.barbar.dev` in DNS and permanently redirect it to the apex domain so mistaken links resolve.
 6. Build genuine links through professional profiles, open-source work, technical talks, and relevant communities. Do not buy or exchange manipulative links.

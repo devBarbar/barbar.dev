@@ -14,6 +14,57 @@ const failures = [];
 const warnings = [];
 let publishedCount = 0;
 
+const requiredRouteFiles = [
+  ["/", "app/(en)/page.tsx"],
+  ["/blog", "app/(en)/blog/page.tsx"],
+  ["/blog/{slug}", "app/(en)/blog/[slug]/page.tsx"],
+  ["/blog/feed.xml", "app/(en)/blog/feed.xml/route.ts"],
+  ["/de", "app/(de)/de/page.tsx"],
+  ["/de/blog", "app/(de)/de/blog/page.tsx"],
+  ["/de/blog/{slug}", "app/(de)/de/blog/[slug]/page.tsx"],
+  ["/de/blog/feed.xml", "app/(de)/de/blog/feed.xml/route.ts"],
+];
+
+for (const [route, relativeFile] of requiredRouteFiles) {
+  if (!fs.existsSync(path.join(projectRoot, relativeFile))) {
+    failures.push(`${relativeFile}: required canonical route ${route} is missing`);
+  }
+}
+
+const retiredLocaleRoutes = [
+  "app/[locale]/page.tsx",
+  "app/[locale]/layout.tsx",
+  "app/[locale]/blog/page.tsx",
+  "app/[locale]/blog/[slug]/page.tsx",
+  "app/[locale]/blog/feed.xml/route.ts",
+];
+
+for (const relativeFile of retiredLocaleRoutes) {
+  if (fs.existsSync(path.join(projectRoot, relativeFile))) {
+    failures.push(
+      `${relativeFile}: dynamic locale routes would make /en indexable again`,
+    );
+  }
+}
+
+for (const relativeFile of [
+  "app/_localized/metadata.ts",
+  "app/sitemap.ts",
+  "lib/seo.ts",
+]) {
+  const file = path.join(projectRoot, relativeFile);
+
+  if (!fs.existsSync(file)) continue;
+
+  const source = fs.readFileSync(file, "utf8");
+
+  if (/['"`]\/en(?:[\/#'"`]|$)/.test(source)) {
+    failures.push(
+      `${relativeFile}: technical SEO URLs must use unprefixed English canonicals`,
+    );
+  }
+}
+
 function isValidDate(value) {
   if (typeof value !== "string" || !datePattern.test(value)) return false;
 

@@ -47,6 +47,74 @@ html {
   box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
 }
 
+/* Homepage motion without a client-side animation runtime */
+@keyframes home-slide-up {
+  from {
+    transform: translateY(var(--home-reveal-distance, 30px));
+  }
+}
+
+@keyframes home-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--home-reveal-distance, 40px));
+  }
+}
+
+@keyframes home-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.home-hero-intro {
+  animation: home-slide-up 0.8s ease-out both;
+}
+
+.home-hero-actions {
+  --home-reveal-distance: 20px;
+  animation: home-slide-up 0.8s 0.2s ease-out both;
+}
+
+.home-hero-scroll-cue {
+  animation: home-fade-in 1s 1s ease-out both;
+}
+
+@supports (animation-timeline: view()) {
+  .home-view-reveal {
+    animation: home-fade-up ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+
+  .home-view-reveal-project {
+    --home-reveal-distance: 30px;
+  }
+
+  .home-project-card:nth-child(3n + 2) {
+    animation-range: entry 5% cover 35%;
+  }
+
+  .home-project-card:nth-child(3n + 3) {
+    animation-range: entry 10% cover 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .home-hero-intro,
+  .home-hero-actions,
+  .home-hero-scroll-cue,
+  .home-view-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Markdown article typography */
 .markdown {
   color: #cbd5e1;

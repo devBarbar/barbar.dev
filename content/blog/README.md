@@ -1,6 +1,9 @@
 # Blog authoring
 
-Add English posts to `content/blog/en` and German posts to `content/blog/de`. The filename becomes the URL slug, so use lowercase kebab-case such as `my-new-post.md`.
+Add English posts to `content/blog/en` and German posts to `content/blog/de`.
+English posts are published at `/blog/{slug}` and German posts at
+`/de/blog/{slug}`. The filename becomes the URL slug, so use lowercase
+kebab-case such as `my-new-post.md`.
 
 Use this front matter at the top of every post:
 

@@ -1,5 +1,5 @@
 import type { BlogPost, BlogPostSummary } from "@/lib/blog";
-import type { Locale } from "@/lib/locales";
+import { getLocalizedPath, type Locale } from "@/lib/locales";
 import { youtubeChannel } from "@/lib/youtube";
 
 export const siteConfig = {
@@ -21,7 +21,7 @@ export function absoluteUrl(pathname = "/") {
 }
 
 export function getFeedPath(locale: Locale) {
-  return `/${locale}/blog/feed.xml`;
+  return getLocalizedPath(locale, "/blog/feed.xml");
 }
 
 export function getPostImage(post: BlogPostSummary) {
@@ -46,7 +46,7 @@ const authorJsonLd = {
   "@type": "Person",
   "@id": siteConfig.authorId,
   name: siteConfig.authorName,
-  url: absoluteUrl("/en#about"),
+  url: absoluteUrl("/#about"),
   jobTitle: "Lead Software Engineer",
   sameAs: [siteConfig.linkedInUrl, youtubeChannel.url],
   address: {
@@ -83,7 +83,7 @@ export function getBlogJsonLd({
   description: string;
   posts: BlogPostSummary[];
 }) {
-  const blogUrl = absoluteUrl(`/${locale}/blog`);
+  const blogUrl = absoluteUrl(getLocalizedPath(locale, "/blog"));
 
   return {
     "@context": "https://schema.org",
@@ -96,7 +96,7 @@ export function getBlogJsonLd({
     isPartOf: { "@id": siteConfig.websiteId },
     author: { "@id": siteConfig.authorId },
     blogPost: posts.map((post) => {
-      const url = absoluteUrl(`/${locale}/blog/${post.slug}`);
+      const url = absoluteUrl(getLocalizedPath(locale, `/blog/${post.slug}`));
       const image = getPostImage(post);
 
       return {
@@ -123,9 +123,9 @@ export function getPostJsonLd({
   homeLabel: string;
   blogLabel: string;
 }) {
-  const postUrl = absoluteUrl(`/${post.locale}/blog/${post.slug}`);
-  const homeUrl = absoluteUrl(`/${post.locale}`);
-  const blogUrl = absoluteUrl(`/${post.locale}/blog`);
+  const postUrl = absoluteUrl(getLocalizedPath(post.locale, `/blog/${post.slug}`));
+  const homeUrl = absoluteUrl(getLocalizedPath(post.locale));
+  const blogUrl = absoluteUrl(getLocalizedPath(post.locale, "/blog"));
   const image = getPostImage(post);
   const video =
     post.youtubeVideoId && post.youtubeVideoUploadDate

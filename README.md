@@ -16,7 +16,9 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The portfolio is available in English at `/en` and German at `/de`.
+English is the default language at `/`, with the blog at `/blog`. German is
+available under `/de`, with the German blog at `/de/blog`. Legacy `/en` URLs
+permanently redirect to their unprefixed English equivalents.
 
 ## Publishing a blog post
 

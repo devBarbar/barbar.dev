@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 
 import { getPortfolioData } from "@/lib/data";
@@ -13,29 +10,19 @@ export default function Projects({ locale }: { locale: Locale }) {
 
     return (
         <section id="projects" className="py-24 px-4 md:px-6 container mx-auto max-w-6xl">
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6 }}
-                className="mb-16"
-            >
+            <div className="home-view-reveal home-view-reveal-project mb-16">
                 <h2 className="text-3xl md:text-5xl font-bold mb-4">{copy.heading}</h2>
                 <div className="h-1 w-20 bg-blue-500 rounded-full mb-8"></div>
                 <p className="max-w-2xl text-slate-400 text-lg">
                     {copy.introduction}
                 </p>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.map((project, idx) => (
-                    <motion.div
+                {projects.map((project) => (
+                    <div
                         key={project.slug}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-50px" }}
-                        transition={{ duration: 0.5, delay: idx * 0.1 }}
-                        className="group relative glass rounded-2xl overflow-hidden border border-slate-800 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-2 flex flex-col h-full"
+                        className="home-view-reveal home-view-reveal-project home-project-card group relative glass rounded-2xl overflow-hidden border border-slate-800 transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-2 motion-reduce:hover:translate-y-0 flex flex-col h-full"
                     >
                         <div className="p-6 flex-grow flex flex-col">
                             <div className="flex justify-between items-start mb-4">
@@ -78,7 +65,7 @@ export default function Projects({ locale }: { locale: Locale }) {
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </section>

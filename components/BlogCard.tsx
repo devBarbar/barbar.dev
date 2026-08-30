@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import type { BlogPostSummary } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/locales";
+import { getLocalizedPath, type Locale } from "@/lib/locales";
 
 function formatDate(date: string, locale: Locale) {
   return new Intl.DateTimeFormat(locale === "de" ? "de-DE" : "en-US", {
@@ -41,7 +41,7 @@ export default function BlogCard({
       </div>
 
       <Heading className="mb-3 text-2xl font-bold leading-tight text-white transition-colors group-hover:text-blue-300">
-        <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
+        <Link href={getLocalizedPath(locale, `/blog/${post.slug}`)}>{post.title}</Link>
       </Heading>
       <p className="mb-6 flex-grow leading-relaxed text-slate-400">{post.description}</p>
 
@@ -56,7 +56,7 @@ export default function BlogCard({
       )}
 
       <Link
-        href={`/${locale}/blog/${post.slug}`}
+        href={getLocalizedPath(locale, `/blog/${post.slug}`)}
         className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 transition-colors hover:text-blue-300"
       >
         {blog.readMore}

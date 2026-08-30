@@ -63,6 +63,7 @@ const dictionaries = {
       description:
         "On devBarbar I talk openly about work, personal growth, procrastination, health, and learning to move forward before everything feels perfectly figured out.",
       watchVideo: "Watch on YouTube",
+      playVideo: "Play video",
       visitChannel: "Visit the devBarbar channel",
       playerTitle: "Play the latest devBarbar video",
     },
@@ -138,6 +139,7 @@ const dictionaries = {
       description:
         "Auf devBarbar spreche ich offen über Arbeit, persönliche Entwicklung, Prokrastination, Gesundheit und darüber, anzufangen, bevor sich alles perfekt geklärt anfühlt.",
       watchVideo: "Auf YouTube ansehen",
+      playVideo: "Video abspielen",
       visitChannel: "Zum YouTube-Kanal devBarbar",
       playerTitle: "Das neueste Video von devBarbar abspielen",
     },

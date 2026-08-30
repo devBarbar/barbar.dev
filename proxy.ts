@@ -1,26 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const supportedLocales = ["en", "de"];
+const publicFilePattern = /\.[^/]+$/;
+
+function normalizedRoutePath(pathname: string) {
+  const lowercasePathname = pathname.toLowerCase();
+  return lowercasePathname.length > 1
+    ? lowercasePathname.replace(/\/+$/, "")
+    : lowercasePathname;
+}
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const lowercasePathname = pathname.toLowerCase();
+  const normalizedPathname = normalizedRoutePath(pathname);
+  const hasOldEnglishPrefix =
+    normalizedPathname === "/en" || normalizedPathname.startsWith("/en/");
 
-  if (pathname !== lowercasePathname) {
-    request.nextUrl.pathname = lowercasePathname;
-    return NextResponse.redirect(request.nextUrl, 308);
+  if (hasOldEnglishPrefix) {
+    const destination = normalizedPathname.slice(3) || "/";
+    const redirectUrl = new URL(request.url);
+    redirectUrl.pathname = destination;
+    return NextResponse.redirect(redirectUrl, 308);
   }
 
-  const firstSegment = pathname.split("/")[1];
-
-  if (supportedLocales.includes(firstSegment)) {
+  if (publicFilePattern.test(pathname)) {
     return NextResponse.next();
   }
 
-  request.nextUrl.pathname = `/en${pathname}`;
-  return NextResponse.redirect(request.nextUrl, 308);
+  if (pathname !== normalizedPathname) {
+    const redirectUrl = new URL(request.url);
+    redirectUrl.pathname = normalizedPathname;
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|icon|apple-icon|.*\\..*).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|icon|apple-icon).*)",
+  ],
 };

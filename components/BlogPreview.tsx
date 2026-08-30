@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import type { BlogPostSummary } from "@/lib/blog";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/locales";
+import { getLocalizedPath, type Locale } from "@/lib/locales";
 import BlogCard from "@/components/BlogCard";
 
 export default function BlogPreview({
@@ -25,7 +25,7 @@ export default function BlogPreview({
           <p className="max-w-2xl text-lg text-slate-400">{blog.latestIntroduction}</p>
         </div>
         <Link
-          href={`/${locale}/blog`}
+          href={getLocalizedPath(locale, "/blog")}
           className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-blue-400 transition-colors hover:text-blue-300"
         >
           {blog.viewAll}
