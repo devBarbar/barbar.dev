@@ -16,9 +16,13 @@ This document records the SEO contract for barbar.dev. Technical SEO helps Googl
   feed at `/de/blog/feed.xml`.
 - Article pages publish visible authorship and dates plus `BlogPosting`, `BreadcrumbList`, and—only with accurate upload data—`VideoObject` JSON-LD.
 - A post uses its own featured image or YouTube thumbnail for article previews. Do not use the generic site card as an article image when the article has no representative image.
-- Legacy `/en` routes redirect directly to their unprefixed equivalents with a
-  permanent `308`. URL-case normalization also uses `308`; unknown locales and
-  slugs return real 404 responses.
+- Legacy lowercase `/en` routes are compatibility aliases that internally rewrite
+  to their unprefixed equivalents with a `200`. HTML page aliases publish an
+  unprefixed canonical and perform an early non-navigating URL cleanup; non-HTML
+  aliases retain canonical unprefixed contents. This prevents a loop for browsers
+  that cached the site's former permanent `/` to `/en` redirect. URL-case
+  normalization still uses `308`; unknown locales and slugs return real 404
+  responses.
 - Google may use large image and unrestricted snippet/video previews through the site-wide robots metadata.
 
 `npm run check:seo` validates the content-side invariants. It runs automatically before `npm run build`.

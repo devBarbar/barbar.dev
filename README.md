@@ -18,7 +18,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 English is the default language at `/`, with the blog at `/blog`. German is
 available under `/de`, with the German blog at `/de/blog`. Legacy `/en` URLs
-permanently redirect to their unprefixed English equivalents.
+are compatibility aliases that render the canonical unprefixed English route
+without another navigation. This protects visitors whose browsers cached the
+site's former permanent `/` to `/en` redirect.
 
 ## Publishing a blog post
 
